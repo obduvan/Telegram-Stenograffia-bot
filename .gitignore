@@ -21,3 +21,14 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+.gitignore
+Telegram-Stenograffia-bot.iml
+compiler.xml
+jarRepositories.xml
+misc.xml
+vcs.xml
+Stenograffia_bot.iml
+target/classes/default message/
+target/generated-sources/
+Stenograffia_bot.iml
+Stenograffia_bot1.iml
