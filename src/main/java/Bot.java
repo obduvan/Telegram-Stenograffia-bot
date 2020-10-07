@@ -12,8 +12,6 @@ import java.nio.file.Paths;
 
 
 public class Bot extends TelegramLongPollingBot {
-    private static final String TOKEN = "1106275931:AAHWAB5xYdWCyhv2WVNCTVOgB8KQo2QQ39g";
-    private static final String USERNAME = "Stenograffia_art_bot";
 
 
     public void sendMsg(Message message, String text) {
@@ -47,7 +45,10 @@ public class Bot extends TelegramLongPollingBot {
 
 
                 case "/works":
-                    sendMsg(message, "какой год вас интересует?");
+                    sendMsg(message, "ща");
+
+                case "/authors":
+                    sendMsg(message, Constants.AUTHORS);
                 default:
             }
         }
@@ -61,10 +62,10 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public String getBotUsername() {
-        return USERNAME;
+        return Constants.USERNAME;
     }
 
     public String getBotToken() {
-        return TOKEN;
+        return Constants.TOKEN;
     }
 }
