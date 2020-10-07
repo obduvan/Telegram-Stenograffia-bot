@@ -42,13 +42,12 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     sendMsg(message, defaultMsg);
                     break;
-
-
-                case "/works":
-                    sendMsg(message, "ща");
-
                 case "/authors":
                     sendMsg(message, Constants.AUTHORS);
+                    break;
+                case "/works":
+                    sendMsg(message, "ща");
+                    break;
                 default:
             }
         }
