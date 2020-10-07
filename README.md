@@ -31,4 +31,4 @@
   - [x] README <br>
   - [x] Базовые команды <br>
 
- </details>
+</details>
