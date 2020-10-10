@@ -20,6 +20,7 @@ public class Bot extends TelegramLongPollingBot {
         sendMessage.setChatId(message.getChatId().toString());
         sendMessage.setText(text);
 
+
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
@@ -43,7 +44,7 @@ public class Bot extends TelegramLongPollingBot {
                     sendMsg(message, defaultMsg);
                     break;
                 case "/authors":
-                    sendMsg(message, Constants.AUTHORS);
+                    sendMsg(message, System.getenv("AUTHORS"));
                     break;
                 case "/works":
                     sendMsg(message, "ща");
@@ -61,10 +62,10 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public String getBotUsername() {
-        return Constants.USERNAME;
+        return System.getenv("USERNAME");
     }
 
     public String getBotToken() {
-        return Constants.TOKEN;
+        return System.getenv("TOKEN");
     }
 }
