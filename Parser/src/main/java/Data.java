@@ -29,6 +29,12 @@ import java.util.logging.Logger;
 
 public class Data {
     private static final Map<Integer, Composition> compositionMap = new HashMap<Integer, Composition>();
+    private static final String nameTitle = "shortTitle";
+    private static final String nameCoordinates = "coordinates";
+    private static final String namePhotos = "photos";
+    private static final String nameAddress = "fullAddress";
+    private static final String nameSummary = "summary";
+
 
     public Map<Integer, Composition> get_data(List<String> jsonFiles) {
         JSONParser jsonParser = new JSONParser();
@@ -40,15 +46,14 @@ public class Data {
                 for (Object element : jsonArray) {
                     var jsonObject = (JSONObject) element;
 
-                    String title = (String) jsonObject.get("shortTitle");
-                    String coordinates = jsonObject.get("coordinates").toString();
-                    var photos = jsonObject.get("photos");
+                    String title = (String) jsonObject.get(nameTitle);
+                    String coordinates = jsonObject.get(nameCoordinates).toString();
+                    String address = (String) jsonObject.get(nameAddress);
+                    String summary = (String) jsonObject.get(nameSummary);
+
+                    var photos = jsonObject.get(namePhotos);
                     var photosList = getPhotos(photos);
-                    String address = (String) jsonObject.get("fullAddress");
-                    String summary = (String) jsonObject.get("summary");
-
-                    var summaryNormal = validate(summary, "summary");
-
+                    var summaryNormal = validate(summary, nameSummary);
                     var coordinatesNormal = coordinates.substring(1, coordinates.length() - 1).split(",");
 
                     compositionMap.put(id, new Composition(title, coordinatesNormal, address, summaryNormal, photosList));
@@ -67,12 +72,15 @@ public class Data {
 
     public String validate(String property, String nameOfProperty) {
         switch (nameOfProperty) {
-            case "summary":
+            case nameSummary:
                 if (property == null) property = "Описание отсутствует";
                 break;
-
         }
         return property;
+    }
+
+    public String changeFormatImage(Object imageFile) {
+        return imageFile.toString().replace("%s", "XXXL");
     }
 
     public List<String> getPhotos(Object photosOb) {
@@ -80,12 +88,12 @@ public class Data {
 
         if (photosOb != null) {
             var photosObj = (JSONObject) photosOb;
-            var previewPhoto = photosObj.get("urlTemplate").toString().replace("%s", "XXXL");
+            var previewPhoto = changeFormatImage(photosObj.get("urlTemplate"));
             photosList.add(previewPhoto);
             var otherPhotos = (JSONArray) photosObj.get("items");
             for (var photo : otherPhotos) {
                 var photoObject = (JSONObject) photo;
-                photosList.add(photoObject.get("urlTemplate").toString().replace("%s", "XXXL"));
+                photosList.add(changeFormatImage(photoObject.get("urlTemplate")));
 
             }
 
