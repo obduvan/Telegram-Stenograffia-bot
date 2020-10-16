@@ -56,6 +56,17 @@ public class Composition {
         return photos;
     }
 
+    @Override
+    public String toString() {
+        return "Composition{" +
+                "title" + title +
+                "coordinates=" + coordinates +
+                ", address='" + address + '\'' +
+                ", summary=" + summary +
+                ", photos=" + photos +
+                '}';
+    }
+
 
 
 
