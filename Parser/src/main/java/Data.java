@@ -37,8 +37,9 @@ public class Data {
                     var photosList = getUrlPhotos(photos);
                     var summaryNormal = validate(summary, nameSummary);
                     var coordinatesNormal = coordinates.substring(1, coordinates.length() - 1).split(",");
+                    coordinates = coordinatesNormal[1] +" "+ coordinatesNormal[0];
 
-                    compositionMap.put(id, new Composition(title, coordinatesNormal, address, summaryNormal, photosList));
+                    compositionMap.put(id, new Composition(title, coordinates, address, summaryNormal, photosList));
                     id++;
 
                 }
