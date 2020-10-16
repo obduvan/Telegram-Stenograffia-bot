@@ -49,9 +49,7 @@ public class Data {
 
                     var summaryNormal = validate(summary, "summary");
 
-
                     var coordinatesNormal = coordinates.substring(1, coordinates.length() - 1).split(",");
-
 
                     compositionMap.put(id, new Composition(title, coordinatesNormal, address, summaryNormal, photosList));
                     id++;
@@ -60,11 +58,7 @@ public class Data {
             }
 
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
         return compositionMap;
@@ -94,7 +88,6 @@ public class Data {
                 photosList.add(photoObject.get("urlTemplate").toString().replace("%s", "XXXL"));
 
             }
-
 
         }
         return photosList;

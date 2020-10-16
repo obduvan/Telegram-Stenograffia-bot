@@ -15,15 +15,13 @@ public class Main {
 
         var pathJson = new File(jsonPath);
         var jsonFiles = listFilesForFolder(pathJson);
-        System.out.println(jsonFiles);
         Data parser = new Data();
         var compositionMap = parser.get_data(jsonFiles);
 
-
     }
 
-    public static void iterableMap(Map<Integer, Composition> compositionMap){
-        for(var el : compositionMap.entrySet()){
+    public static void iterableMap(Map<Integer, Composition> compositionMap) {
+        for (var el : compositionMap.entrySet()) {
             System.out.println(el.getValue().address);
         }
     }
