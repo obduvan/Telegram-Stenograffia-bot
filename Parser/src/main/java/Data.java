@@ -1,30 +1,12 @@
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.jsoup.Jsoup;
 
-import org.jsoup.Jsoup;
-import org.jsoup.helper.Validate;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.File;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.logging.Logger;
 
 
 public class Data {
@@ -52,7 +34,7 @@ public class Data {
                     String summary = (String) jsonObject.get(nameSummary);
 
                     var photos = jsonObject.get(namePhotos);
-                    var photosList = getPhotos(photos);
+                    var photosList = getUrlPhotos(photos);
                     var summaryNormal = validate(summary, nameSummary);
                     var coordinatesNormal = coordinates.substring(1, coordinates.length() - 1).split(",");
 
@@ -70,20 +52,8 @@ public class Data {
 
     }
 
-    public String validate(String property, String nameOfProperty) {
-        switch (nameOfProperty) {
-            case nameSummary:
-                if (property == null) property = "Описание отсутствует";
-                break;
-        }
-        return property;
-    }
 
-    public String changeFormatImage(Object imageFile) {
-        return imageFile.toString().replace("%s", "XXXL");
-    }
-
-    public List<String> getPhotos(Object photosOb) {
+    public List<String> getUrlPhotos(Object photosOb) {
         List<String> photosList = new ArrayList<String>();
 
         if (photosOb != null) {
@@ -101,6 +71,20 @@ public class Data {
         return photosList;
 
     }
+
+    public String validate(String property, String nameOfProperty) {
+        switch (nameOfProperty) {
+            case nameSummary:
+                if (property == null) property = "Описание отсутствует";
+                break;
+        }
+        return property;
+    }
+
+    public String changeFormatImage(Object imageFile) {
+        return imageFile.toString().replace("%s", "XXXL");
+    }
+
 
     public void printSmth(String text) {
         if (text != null) {
