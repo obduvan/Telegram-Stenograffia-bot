@@ -20,12 +20,6 @@ public class Main {
 
     }
 
-    public static void iterableMap(Map<Integer, Composition> compositionMap) {
-        for (var el : compositionMap.entrySet()) {
-            System.out.println(el.getValue().address);
-        }
-    }
-
     public static List<String> listFilesForFolder(File folder) {
         var jsonFiles = new ArrayList<String>();
 

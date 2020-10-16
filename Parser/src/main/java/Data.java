@@ -54,7 +54,7 @@ public class Data {
     }
 
 
-    public List<String> getUrlPhotos(Object photosOb) {
+    public String getUrlPhotos(Object photosOb) {
         List<String> photosList = new ArrayList<String>();
 
         if (photosOb != null) {
@@ -69,7 +69,7 @@ public class Data {
             }
 
         }
-        return photosList;
+        return photosList.toString();
 
     }
 

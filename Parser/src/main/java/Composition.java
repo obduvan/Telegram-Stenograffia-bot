@@ -5,9 +5,9 @@ public class Composition {
     private String address;
     private String summary;
     private String coordinates;
-    private List<String> photos;
+    private String photos;
 
-    public Composition(String title, String coordinates, String address, String summary, List<String> photos) {
+    public Composition(String title, String coordinates, String address, String summary, String photos) {
         this.title = title;
         this.coordinates = coordinates;
         this.address = address;
@@ -28,7 +28,7 @@ public class Composition {
         this.coordinates = coordinates;
     }
 
-    public void setPhotos(List<String> photos) {
+    public void setPhotos(String photos) {
         this.photos = photos;
     }
 
@@ -52,7 +52,7 @@ public class Composition {
         return title;
     }
 
-    public List<String> getPhotos() {
+    public String getPhotos() {
         return photos;
     }
 
