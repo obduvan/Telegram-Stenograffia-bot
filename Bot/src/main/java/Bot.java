@@ -1,6 +1,7 @@
 import org.apache.commons.io.IOUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -28,6 +29,17 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+    public void sendImg(Message message){
+        SendPhoto sendPhotoRequest = new SendPhoto();
+        sendPhotoRequest.setChatId(message.getChatId().toString());
+        sendPhotoRequest.setPhoto("https://avatars.mds.yandex.net/get-altay/2930751/2a0000017522b84a0bd86d10a25f74f6ebff/XXXL");
+        try {
+            execute(sendPhotoRequest);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
@@ -48,6 +60,9 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 case "/works":
                     sendMsg(message, "ща");
+                    break;
+                case "/dpick":
+                    sendImg(message);
                     break;
                 default:
             }

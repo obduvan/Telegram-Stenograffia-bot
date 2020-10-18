@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 public class Base {
@@ -12,14 +13,29 @@ public class Base {
                     "jdbc:sqlite:stenograffia_bot",
                     "root",
                     "password");
-            System.out.println("Succeed!");
-        }
-        catch (Exception e) {
+            System.out.println("Connected Succeed!");
+
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    void insert(Composition art) {
+    void delete() {
+
+        try {
+
+            String query = "DELETE FROM ARTS";
+            Statement statement = conn.createStatement();
+            statement.executeUpdate(query);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
+
+    void insert(Composition art, Integer numCol) {
+
 
         String title = art.getTitle();
         String coordinates = art.getCoordinates();
@@ -32,9 +48,9 @@ public class Base {
                     "VALUES ('" + title + "','" + coordinates + "','" + address + "','" + summary + "','" + photos + "')";
             Statement statement = conn.createStatement();
             statement.executeUpdate(query);
-            System.out.println("Rows added!");
-        }
-        catch (Exception e) {
+            System.out.println("Rows added! " + numCol);
+
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
@@ -42,8 +58,7 @@ public class Base {
     void close() {
         try {
             conn.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
