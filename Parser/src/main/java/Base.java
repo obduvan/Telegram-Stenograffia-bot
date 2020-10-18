@@ -1,3 +1,5 @@
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -5,14 +7,18 @@ import java.sql.Statement;
 
 public class Base {
     Connection conn;
+    Statement statement;
 
     void open() {
         try {
+            Path dirPath = Paths.get(System.getProperty("user.dir") + "/..").toRealPath();
+            Path dbPath = dirPath.resolve("stenograffia_bot");
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(
-                    "jdbc:sqlite:stenograffia_bot",
+                    "jdbc:sqlite:"+dbPath,
                     "root",
                     "password");
+            statement = conn.createStatement();
             System.out.println("Connected Succeed!");
 
         } catch (Exception e) {
@@ -23,9 +29,7 @@ public class Base {
     void delete() {
 
         try {
-
             String query = "DELETE FROM ARTS";
-            Statement statement = conn.createStatement();
             statement.executeUpdate(query);
 
         } catch (Exception e) {
@@ -46,9 +50,9 @@ public class Base {
         try {
             String query = "INSERT INTO ARTS (TITLE, COORDINATES, ADDRESS, SUMMARY, PHOTOS) " +
                     "VALUES ('" + title + "','" + coordinates + "','" + address + "','" + summary + "','" + photos + "')";
-            Statement statement = conn.createStatement();
             statement.executeUpdate(query);
             System.out.println("Rows added! " + numCol);
+
 
         } catch (Exception e) {
             System.out.println(e);
@@ -57,7 +61,9 @@ public class Base {
 
     void close() {
         try {
+            statement.close();
             conn.close();
+
         } catch (Exception e) {
             System.out.println(e);
         }
