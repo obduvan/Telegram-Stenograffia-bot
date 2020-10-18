@@ -69,7 +69,8 @@ public class Data {
             }
 
         }
-        return photosList.toString();
+
+        return photosList.toString().replace("[", "").replace("]", "");
 
     }
 
