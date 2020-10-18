@@ -8,15 +8,12 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws ParseException {
-        String jsonPath = "/Users/polina/Desktop/Study/Java/Telegram-Stenograffia-bot/Parser/src/main/resources/jsonFiles/package.json";
-
-        List<String> list = Arrays.asList(jsonPath);
+        String jsonPath = "src\\main\\resources\\jsonFiles";
 
         var pathJson = new File(jsonPath);
-//        var jsonFiles = listFilesForFolder(pathJson);
+        var jsonFiles = listFilesForFolder(pathJson);
         Data parser = new Data();
-        var compositionMap = parser.get_data(list);
-
+        var compositionMap = parser.get_data(jsonFiles);
         Base db = new Base();
 
         db.open();
