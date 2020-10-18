@@ -21,3 +21,20 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+.idea/
+Bot/.idea/
+Bot/Stenograffia_bot.iml
+Bot/target/classes/default message/
+Bot/target/generated-sources/
+Parser/.idea/.gitignore
+Parser/.idea/compiler.xml
+Parser/.idea/jarRepositories.xml
+Parser/.idea/misc.xml
+Parser/.idea/uiDesigner.xml
+Parser/.idea/vcs.xml
+Parser/Parser.iml
+Parser/target/classes/jsonFiles/
+Parser/target/generated-sources/
+/Bot/.idea/
+
