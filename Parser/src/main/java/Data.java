@@ -10,7 +10,7 @@ import java.util.*;
 
 
 public class Data {
-    private static final Map<Integer, Composition> compositionMap = new HashMap<Integer, Composition>();
+     Map<Integer, Composition> compositionMap = new HashMap<Integer, Composition>();
     private static final String nameTitle = "shortTitle";
     private static final String nameCoordinates = "coordinates";
     private static final String namePhotos = "photos";
@@ -59,8 +59,6 @@ public class Data {
 
         if (photosOb != null) {
             var photosObj = (JSONObject) photosOb;
-            var previewPhoto = changeFormatImage(photosObj.get("urlTemplate"));
-            photosList.add(previewPhoto);
             var otherPhotos = (JSONArray) photosObj.get("items");
             for (var photo : otherPhotos) {
                 var photoObject = (JSONObject) photo;
