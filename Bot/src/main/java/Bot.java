@@ -52,14 +52,14 @@ public class Bot extends TelegramLongPollingBot {
         SendPhoto sendPhotoRequest = new SendPhoto();
         sendPhotoRequest.setChatId(message.getChatId().toString());
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 8; i++) {
             rs.next();
             String title = rs.getString("TITLE");
             String[] photos = parsePhotos(rs.getString("PHOTOS"));
             String coordinates = String.format("\n%s", rs.getString("COORDINATES"));
 
 
-            sendPhotoRequest.setCaption(title+coordinates);
+            sendPhotoRequest.setCaption(String.format("%s %s", title, coordinates));
             sendPhotoRequest.setPhoto(photos[0].strip());
 
             try {
@@ -79,13 +79,12 @@ public class Bot extends TelegramLongPollingBot {
             switch (message.getText()) {
                 case "/help":
                 case "/start":
-                    String defaultMsg = null;
                     try {
-                        defaultMsg = getDefaultMessage();
+                        String defaultMsg = getDefaultMessage();
+                        sendMsg(message, defaultMsg);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    sendMsg(message, defaultMsg);
                     break;
                 case "/authors":
                     sendMsg(message, System.getenv("AUTHORS"));
@@ -96,7 +95,6 @@ public class Bot extends TelegramLongPollingBot {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-
                     break;
                 default:
             }
@@ -105,9 +103,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public String getDefaultMessage() throws IOException {
-        String content;
-        content = new String(Files.readAllBytes(Paths.get("src\\main\\resources\\default message\\defaultMessage.md")));
-        return content;
+        return new String(Files.readAllBytes(Paths.get("src\\main\\resources\\default message\\defaultMessage.md")));
     }
 
     public String getBotUsername() {
