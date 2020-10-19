@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.util.*;
 
 public class Main {
+    static Map<Integer, Composition> compositionMap;
 
 
     public static void main(String[] args) throws ParseException {
@@ -14,7 +15,7 @@ public class Main {
         var pathJson = new File(jsonPath);
         var jsonFiles = listFilesForFolder(pathJson);
         Data parser = new Data();
-        var compositionMap = parser.get_data(jsonFiles);
+        compositionMap = parser.get_data(jsonFiles);
 
         Base db = new Base();
         db.open();
