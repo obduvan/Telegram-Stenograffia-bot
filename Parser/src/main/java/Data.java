@@ -10,7 +10,7 @@ import java.util.*;
 
 
 public class Data {
-     Map<Integer, Composition> compositionMap = new HashMap<Integer, Composition>();
+    Map<Integer, Composition> compositionMap = new HashMap<Integer, Composition>();
     private static final String nameTitle = "shortTitle";
     private static final String nameCoordinates = "coordinates";
     private static final String namePhotos = "photos";
@@ -37,7 +37,7 @@ public class Data {
                     var photosList = getUrlPhotos(photos);
                     var summaryNormal = validate(summary, nameSummary);
                     var coordinatesNormal = coordinates.substring(1, coordinates.length() - 1).split(",");
-                    coordinates = coordinatesNormal[1] +" "+ coordinatesNormal[0];
+                    coordinates = coordinatesNormal[1] + " " + coordinatesNormal[0];
 
                     compositionMap.put(id, new Composition(title, coordinates, address, summaryNormal, photosList));
                     id++;
@@ -86,24 +86,6 @@ public class Data {
     }
 
 
-    public void printSmth(String text) {
-        if (text != null) {
-            String[] summaryArray = text.split(" ");
-            int a = 0;
-            StringBuilder sent = new StringBuilder();
-
-            for (String word : summaryArray) {
-                a++;
-                sent.append(" ").append(word);
-                if (a == 10) {
-                    System.out.println(sent);
-                    sent.setLength(0);
-                    a = 0;
-                }
-            }
-            System.out.println(sent);
-        }
-    }
 }
 
 

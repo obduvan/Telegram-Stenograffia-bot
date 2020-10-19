@@ -19,7 +19,7 @@ public class ConnectDataBase {
                     "password");
             state  = conn.createStatement();
 
-            System.out.println("Connected Succeed!");
+            System.out.println("Connected to stenograffia_bot Succeed!");
 
         } catch (Exception e) {
             System.out.println(e);
