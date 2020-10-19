@@ -49,7 +49,6 @@ public class Bot extends TelegramLongPollingBot {
         ConnectDataBase dataBase = new ConnectDataBase();
         ResultSet rs = dataBase.state.executeQuery("select * from ARTS;");
 
-        SendMessage sendMessage = setMessage(message);
         SendPhoto sendPhotoRequest = new SendPhoto();
         sendPhotoRequest.setChatId(message.getChatId().toString());
 
@@ -60,10 +59,10 @@ public class Bot extends TelegramLongPollingBot {
             String coordinates = String.format("\n%s", rs.getString("COORDINATES"));
 
 
-            sendMessage.setText(title + coordinates);
+            sendPhotoRequest.setCaption(title+coordinates);
             sendPhotoRequest.setPhoto(photos[0].strip());
+
             try {
-                execute(sendMessage);
                 execute(sendPhotoRequest);
             } catch (TelegramApiException e) {
                 e.printStackTrace();
