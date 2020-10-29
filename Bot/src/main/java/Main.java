@@ -10,6 +10,8 @@ public class Main {
         TelegramBotsApi telegram = new TelegramBotsApi();
         ConnectDataBase connectDataBase = new ConnectDataBase();
         var dataList = connectDataBase.getDataList();
+        connectDataBase.close();
+
         Bot bot = new Bot(dataList);
 
         try {
