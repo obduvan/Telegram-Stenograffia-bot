@@ -1,3 +1,5 @@
+import constants.Constants;
+
 import java.io.IOException;
 
 
@@ -14,7 +16,7 @@ public class Sender {
 
     private void checkState(State state){
         if (state.getStatus() == BotState.ASK_WORKS)
-            if (state.getNumPhotoWorks() >= 114){
+            if (state.getNumPhotoWorks() >= Constants.NUMWORKS){
                 standartFunctions.sendEndedWorks(state.getLastMessage());
             }
     }
