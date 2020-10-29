@@ -1,23 +1,27 @@
+import constants.Constants;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectDataBase {
-    Connection conn;
-    Statement state;
-    public ConnectDataBase(){
+    private Connection connection;
+    private Statement state;
 
+    public ConnectDataBase(){
         try {
             Path dirPath = Paths.get(System.getProperty("user.dir") + "/..").toRealPath();
             Path dbPath = dirPath.resolve("stenograffia_bot");
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection(
+            connection = DriverManager.getConnection(
                     "jdbc:sqlite:"+dbPath,
                     "root",
                     "password");
-            state  = conn.createStatement();
+            state  = connection.createStatement();
 
             System.out.println("Connected to stenograffia_bot Succeed!");
 
@@ -27,13 +31,30 @@ public class ConnectDataBase {
         }
     }
 
+    private String[] parsePhotos(String photos) {
+        return photos.split(",");
+    }
+
+    public List<Map<String, String>> getDataList() throws SQLException {
+        List<Map<String, String>> dataList = new ArrayList<>(){};
+        ResultSet rs = state.executeQuery("select * from ARTS;");
+        while(rs.next()){
+            var map = new ConcurrentHashMap(){};
+            map.put(Constants.TITLE, rs.getString(Constants.TITLE));
+            map.put(Constants.PHOTOS, parsePhotos(rs.getString(Constants.IDS))[0]);
+            map.put(Constants.IDS, rs.getString(Constants.IDS));
+            dataList.add(map);
+        }
+
+       return dataList;
+    }
+
     public void close(){
         try {
             state.close();
-            conn.close();
+            connection.close();
         } catch (Exception e) {
             System.out.println(e);
         }
     }
-
 }
