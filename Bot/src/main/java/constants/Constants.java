@@ -14,8 +14,7 @@ public class Constants {
     public static final Integer BUFFER = 5;
     public static final Integer NUMWORKS = 114;
     public static final String ENDEDWORKSMSG = "Работ больше нет :(";
-    
-    public static final String SYSAUTHORS = "AUTHORS";
+
     public static final String SYSTOKEN = "TOKEN";
     public static final String SYSNAMEBOT = "NAMEBOT";
     

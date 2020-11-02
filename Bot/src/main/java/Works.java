@@ -31,7 +31,7 @@ public class Works {
             while (buffer != 0) {
                 sendPhotoList.add(sendMsg(state.getLastMessage(), dataList.get(state.getNumPhotoWorks() - 1), state));
                 state.updateNumPhotoWorks(1);
-                buffer -=1;
+                buffer --;
             }
         }
         return sendPhotoList;

@@ -26,11 +26,13 @@ class StandardFunctions {
         return sendMessage;
     }
 
-    private String getNameAuthors() {
-        return System.getenv(Constants.SYSAUTHORS);
+    private String getNameAuthors() throws IOException {
+
+
+        return new String(Files.readAllBytes(Paths.get(ConstantPath.authorsMessage)));
     }
 
-    public SendMessage sendAuthorsMsg(Message message) {
+    public SendMessage sendAuthorsMsg(Message message) throws IOException {
         var text = getNameAuthors();
         SendMessage sendMessage = setMessage(message);
         sendMessage.setText(text);
