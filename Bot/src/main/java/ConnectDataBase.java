@@ -1,5 +1,4 @@
 import constants.Constants;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
@@ -27,7 +26,6 @@ public class ConnectDataBase {
 
         } catch (Exception e) {
             System.out.println(e);
-
         }
     }
 

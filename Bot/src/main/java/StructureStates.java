@@ -25,9 +25,9 @@ public class StructureStates {
 
     public void putState(State newState){
         if (newState.getStatus() == BotState.NEXT_ART){
-            for(State state : stateList){
-                if (state.getStatus() == BotState.ASK_WORKS) {
-                    mainState = state;
+            for (int i = stateList.size() - 1; i >= 0; i--) {
+                if (stateList.get(i).getStatus() == BotState.ASK_WORKS) {
+                    mainState = stateList.get(i);
                     break;
                 }
             }

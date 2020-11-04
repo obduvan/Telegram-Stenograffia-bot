@@ -7,12 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
-class StandartFunctions {
-    private Bot bot;
+class StandardFunctions {
 
-    public StandartFunctions(Bot ibot){
-        bot = ibot;
-    }
     private SendMessage setMessage(Message message) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
@@ -24,27 +20,29 @@ class StandartFunctions {
         return new String(Files.readAllBytes(Paths.get(ConstantPath.defaultMessage)));
     }
 
-    public void sendHelpMsg(Message message) throws IOException {
+    public SendMessage sendHelpMsg(Message message) throws IOException {
         SendMessage sendMessage = setMessage(message);
         sendMessage.setText(getDefaultMessage());
-        bot.sendMsg(sendMessage);
+        return sendMessage;
     }
 
-    private String getNameAuthors() {
-        return System.getenv(Constants.SYSAUTHORS);
+    private String getNameAuthors() throws IOException {
+
+
+        return new String(Files.readAllBytes(Paths.get(ConstantPath.authorsMessage)));
     }
 
-    public void sendAuthorsMsg(Message message) {
+    public SendMessage sendAuthorsMsg(Message message) throws IOException {
         var text = getNameAuthors();
         SendMessage sendMessage = setMessage(message);
         sendMessage.setText(text);
-        bot.sendMsg(sendMessage);
+        return sendMessage;
     }
 
-    public void sendEndedWorks(Message message){
+    public SendMessage sendEndedWorks(Message message){
         var text = Constants.ENDEDWORKSMSG;
         SendMessage sendMessage = setMessage(message);
         sendMessage.setText(text);
-        bot.sendMsg(sendMessage);
+        return sendMessage;
     }
 }

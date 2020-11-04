@@ -13,7 +13,6 @@ public class ControlState {
         else{
             statesMap.get(userId).putState(newState);
         }
-        System.out.println(statesMap);
     }
 
     public State getStateUser(Integer userId){
