@@ -87,7 +87,7 @@ public class Bot extends TelegramLongPollingBot {
                 botState = BotState.WORKS_LOC_GET;
             }
             else {
-                botState = BotState.NONE;
+                botState = (botStateLast.equals(BotState.WORKS_LOC_RAD)|| botStateLast.equals(BotState.WORKS_LOC_INIT) || botStateLast.equals(BotState.WORKS_LOC_GET))? BotState.WORKS_LOC_RAD : BotState.NONE;
             }
         }
         else{
