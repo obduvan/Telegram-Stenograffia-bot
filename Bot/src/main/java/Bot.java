@@ -19,17 +19,20 @@ public class Bot extends TelegramLongPollingBot {
     private List<Map<String, String>> dataList;
     private Works works;
     private StandardFunctions standardFunctions;
+    private WorkLocation workLocation;
 
     public Bot(List<Map<String, String>> idataList) {
         dataList = idataList;
         controlState = new ControlState();
         works = new Works();
+        workLocation = new WorkLocation();
         standardFunctions = new StandardFunctions();
     }
 
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-        if (message != null && message.hasText()) {
+
+        if (message != null) {
             try {
                 var userId = message.getFrom().getId();
                 handleInputMessage(message, userId);
@@ -53,14 +56,50 @@ public class Bot extends TelegramLongPollingBot {
         s.close();
         return botStateMap;
     }
+    private boolean checkLocMsg(Message message){
+        return message.getLocation() != null;
+    }
 
-    private void handleInputMessage(Message message, Integer userId) throws IOException {
+    public boolean isStringInt(String s)
+    {
+        try
+        {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException ex)
+        {
+            return false;
+        }
+    }
+
+    private BotState checkBotState(Message message, Integer userId) throws IOException {
         String inputMsg = message.getText();
         var botStateMap = getBotStateMap();
-        var botState = botStateMap.getOrDefault(inputMsg, BotState.NONE);
+        BotState botState;
+        BotState botStateLast;
+        botStateLast = controlState.existUser(userId) ? controlState.getStateUser(userId).getStatus() : BotState.NONE;
+        if (inputMsg == null || !botStateMap.containsKey(inputMsg)){
+            if (checkLocMsg(message)){
+                botState = BotState.WORKS_LOC_RAD;
+            }
+            else if (isStringInt(inputMsg) && (botStateLast.equals(BotState.WORKS_LOC_RAD)|| botStateLast.equals(BotState.WORKS_LOC_INIT) || botStateLast.equals(BotState.WORKS_LOC_GET) )){
+//                 LastWorkLocState = controlState.getStructureUser(userId).getStateList().;
+                botState = BotState.WORKS_LOC_GET;
+            }
+            else {
+                botState = BotState.NONE;
+            }
+        }
+        else{
+            botState = botStateMap.get(inputMsg);
+        }
+        return botState;
+    }
 
+    private void handleInputMessage(Message message, Integer userId) throws IOException {
+        System.out.println(message);
+        var botState = checkBotState(message, userId);
         controlState.updateStatesMap(userId, botState, message);
-
     }
 
     private void action(Integer userId) throws IOException {
@@ -73,6 +112,18 @@ public class Bot extends TelegramLongPollingBot {
                 break;
             case ASK_AUTHORS:
                 sendMessage = standardFunctions.sendAuthorsMsg(state.getLastMessage());
+                sendMsg(sendMessage);
+                break;
+            case WORKS_LOC_GET:
+                sendMessage = workLocation.sendMsg(state.getLastMessage());
+                sendMsg(sendMessage);
+                break;
+            case WORKS_LOC_RAD:
+                sendMessage = workLocation.sendRadMsg(state.getLastMessage());
+                sendMsg(sendMessage);
+                break;
+            case WORKS_LOC_INIT:
+                sendMessage = workLocation.sendLocMsg(state.getLastMessage());
                 sendMsg(sendMessage);
                 break;
             case ASK_WORKS:

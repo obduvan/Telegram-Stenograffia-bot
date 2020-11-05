@@ -15,7 +15,14 @@ public class ControlState {
         }
     }
 
+    public boolean existUser(Integer userId){
+        return statesMap.containsKey(userId);
+    }
+
     public State getStateUser(Integer userId){
         return statesMap.get(userId).getMainState();
-        }
+    }
+    public StructureStates getStructureUser(Integer userId){
+        return statesMap.get(userId);
+    }
 }

@@ -27,8 +27,6 @@ class StandardFunctions {
     }
 
     private String getNameAuthors() throws IOException {
-
-
         return new String(Files.readAllBytes(Paths.get(ConstantPath.authorsMessage)));
     }
 

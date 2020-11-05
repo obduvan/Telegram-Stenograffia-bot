@@ -15,14 +15,6 @@ public class StructureStates {
         return mainState;
     }
 
-    public List<State> getStateList(){
-        return stateList;
-    }
-
-    public boolean containsState(State newState){
-        return stateList.contains(newState);
-    }
-
     public void putState(State newState){
         if (newState.getStatus() == BotState.NEXT_ART){
             for (int i = stateList.size() - 1; i >= 0; i--) {
@@ -35,6 +27,14 @@ public class StructureStates {
         else{
             stateList.add(newState);
             mainState = newState;
+
         }
+    }
+    public List<State> getStateList(){
+        return stateList;
+    }
+
+    public boolean containsState(State newState){
+        return stateList.contains(newState);
     }
 }

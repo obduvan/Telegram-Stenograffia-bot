@@ -3,5 +3,8 @@ enum BotState {
     ASK_AUTHORS,
     ASK_WORKS,
     NEXT_ART,
-    NONE
+    WORKS_LOC_INIT,
+    WORKS_LOC_RAD,
+    WORKS_LOC_GET,
+    NONE,
 }
