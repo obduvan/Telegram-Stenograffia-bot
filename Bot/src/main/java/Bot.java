@@ -115,8 +115,16 @@ public class Bot extends TelegramLongPollingBot {
                 sendMsg(sendMessage);
                 break;
             case WORKS_LOC_GET:
-                sendMessage = workLocation.sendMsg(state.getLastMessage());
-                sendMsg(sendMessage);
+                List<SendPhoto> sendLocationPhotoList = workLocation.sendWorksMsg(state, dataList);
+                if (!sendLocationPhotoList.isEmpty()) {
+                    sendMsg(sendLocationPhotoList);
+                    if (checkState(state))
+                        sendMsg(standardFunctions.sendEndedWorks(state.getLastMessage()));
+                } else {
+                    sendMessage = workLocation.sendNoWorksMsg(state.getLastMessage());
+                    sendMsg(sendMessage);
+                }
+
                 break;
             case WORKS_LOC_RAD:
                 sendMessage = workLocation.sendRadMsg(state.getLastMessage());

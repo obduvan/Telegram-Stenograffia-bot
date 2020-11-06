@@ -11,6 +11,8 @@ public class Constants {
     public static final String TITLE = "TITLE";
     public static final String IDS = "IDS";
     public static final String PHOTOS = "PHOTOS";
+    public static final String COORDINATES = "COORDINATES";
+
     public static final Integer BUFFER = 5;
     public static final Integer NUMWORKS = 114;
     public static final String ENDEDWORKSMSG = "Работ больше нет :(";
