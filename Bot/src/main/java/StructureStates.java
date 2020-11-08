@@ -20,8 +20,6 @@ public class StructureStates {
             for (int i = stateList.size() - 1; i >= 0; i--) {
                 switch (stateList.get(i).getStatus()){
                     case ASK_WORKS:
-                        mainState = stateList.get(i);
-                        return;
                     case WORKS_LOC_GET:
                         mainState = stateList.get(i);
                         return;
