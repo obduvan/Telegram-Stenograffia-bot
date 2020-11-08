@@ -23,7 +23,7 @@ public class WorkLocation {
 
     public SendMessage sendLocMsg(Message message) {
         var sendMessage = setMessage(message);
-        sendMessage.setText("Отправьте геометку");
+        sendMessage.setText("Отправьте геопозицию");
         return sendMessage;
     }
 
@@ -64,12 +64,12 @@ public class WorkLocation {
     public List<SendPhoto> sendWorksMsg(State state, List<Map<String, String>> dataList) {
         Message currMessage = state.getLastMessage();
 
-        currRadius = Float.parseFloat(currMessage.getText());
+        this.currRadius = Float.parseFloat(currMessage.getText());
 
         List<SendPhoto> sendPhotoList = new ArrayList<>();
 
-        float deltaLatitude = (float) ((currRadius/1.8)/60);
-        float deltaLongtitude = (float) ((currRadius/1.2)/60);
+        float deltaLatitude = (float) ((this.currRadius/1.8)/60);
+        float deltaLongtitude = (float) ((this.currRadius/1.2)/60);
 
         int a = state.getNumPhotoWorks();
 
