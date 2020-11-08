@@ -18,16 +18,19 @@ public class StructureStates {
     public void putState(State newState){
         if (newState.getStatus() == BotState.NEXT_ART){
             for (int i = stateList.size() - 1; i >= 0; i--) {
-                if (stateList.get(i).getStatus() == BotState.ASK_WORKS) {
-                    mainState = stateList.get(i);
-                    break;
+                switch (stateList.get(i).getStatus()){
+                    case ASK_WORKS:
+                        mainState = stateList.get(i);
+                        return;
+                    case WORKS_LOC_GET:
+                        mainState = stateList.get(i);
+                        return;
                 }
             }
         }
         else{
             stateList.add(newState);
             mainState = newState;
-
         }
     }
     public List<State> getStateList(){
