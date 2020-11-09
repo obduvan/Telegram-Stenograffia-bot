@@ -1,26 +1,20 @@
+package functions;
+
 import constants.Constants;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import realizations.PhotoWorks;
+import systemStates.State;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Works {
+public class Works extends PhotoWorks {
 
-    public SendPhoto sendMsg(Message message, Map<String, String> dataLine, State state){
-        SendPhoto sendPhoto = new SendPhoto();
-        sendPhoto.setChatId(message.getChatId().toString());
-
-        String numPhoto = state.getNumPhotoWorks().toString();
-        String title = dataLine.get(Constants.TITLE);
+    public SendPhoto createPhotoMsg(Message message, Map<String, String> dataLine, State state){
         String link = dataLine.get(Constants.IDS);
-        String photo = dataLine.get(Constants.PHOTOS);
-
-        sendPhoto.setCaption(String.format("%s   %s/%s\n%s", title, numPhoto, Constants.NUMWORKS, link));
-        sendPhoto.setPhoto(photo);
-
-        return sendPhoto;
+        return createPhotoObj(message, dataLine, state, Constants.NUMWORKS, link);
     }
 
 
@@ -29,7 +23,7 @@ public class Works {
         int buffer = Constants.BUFFER;
         if (state.getNumPhotoWorks() < Constants.NUMWORKS){
             while (buffer != 0) {
-                sendPhotoList.add(sendMsg(state.getLastMessage(), dataList.get(state.getNumPhotoWorks() - 1), state));
+                sendPhotoList.add(createPhotoMsg(state.getLastMessage(), dataList.get(state.getNumPhotoWorks() - 1), state));
                 state.updateNumPhotoWorks(1);
                 buffer --;
             }

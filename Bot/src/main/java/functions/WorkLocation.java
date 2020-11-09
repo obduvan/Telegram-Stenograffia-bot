@@ -1,14 +1,17 @@
+package functions;
+
 import constants.Constants;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import realizations.PhotoWorks;
+import systemStates.State;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class WorkLocation {
+public class WorkLocation extends PhotoWorks {
 
     public Float currLocationLatitude = null;
     public Float currLocationLongtitude = null;
@@ -42,23 +45,15 @@ public class WorkLocation {
         return sendMessage;
     }
 
-    public SendPhoto sendMsg(Message message, Map<String, String> dataLine, State state){
-        SendPhoto sendPhoto = new SendPhoto();
-        sendPhoto.setChatId(message.getChatId().toString());
-
-        String numPhoto = state.getNumPhotoWorks().toString();
-        String title = dataLine.get(Constants.TITLE);
-        String photo = dataLine.get(Constants.PHOTOS);
+    public SendPhoto sendMsg(Message message, Map<String, String> dataLine, State state,List<Map<String, String>> dataList){
         String[] workCoordinates = dataLine.get(Constants.COORDINATES).split(" ");
-        String way = "https://yandex.ru/maps/54/yekaterinburg/?ll=60.6125%2C56.8575&mode=routes&rtext="
+        String way = Constants.PathYandexMapLoc
                 +this.currLocationLatitude.toString()+"%2C"+this.currLocationLongtitude.toString()+"~"
                 +workCoordinates[0]+"%2C"+workCoordinates[1]
                 +"&rtt=mt&ruri=~&z=12";
 
-        sendPhoto.setCaption(String.format("%s   %s/%s\n%s", title, numPhoto, Constants.NUMWORKS, way));
-        sendPhoto.setPhoto(photo);
+        return createPhotoObj(message, dataLine, state, dataList.size(),way);
 
-        return sendPhoto;
     }
 
     public List<SendPhoto> sendWorksMsg(State state, List<Map<String, String>> dataList) {
@@ -82,7 +77,7 @@ public class WorkLocation {
 
             if (Math.abs(this.currLocationLatitude - Float.parseFloat(coords[0])) < deltaLatitude &&
                     Math.abs(this.currLocationLongtitude - Float.parseFloat(coords[1])) < deltaLongtitude) {
-                sendPhotoList.add(sendMsg(state.getLastMessage(), currDataLine , state));
+                sendPhotoList.add(sendMsg(state.getLastMessage(), currDataLine , state, dataList));
                 buffer --;
             }
             state.updateNumPhotoWorks(1);

@@ -1,11 +1,19 @@
+package bot;
+
 import constants.ConstantPath;
 import constants.Constants;
+import functions.WorkLocation;
+import functions.Works;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import realizations.StandardFunctions;
+import systemStates.BotState;
+import systemStates.ControlState;
+import systemStates.State;
 
 import java.io.*;
 import java.util.List;
@@ -23,7 +31,7 @@ public class Bot extends TelegramLongPollingBot {
 
     public Bot(List<Map<String, String>> idataList) {
         dataList = idataList;
-        controlState = new ControlState();
+        controlState = new ControlState(    );
         works = new Works();
         workLocation = new WorkLocation();
         standardFunctions = new StandardFunctions();

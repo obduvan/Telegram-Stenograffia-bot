@@ -1,4 +1,8 @@
+package systemStates;
+
 import org.telegram.telegrambots.meta.api.objects.Message;
+import systemStates.State;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ControlState {

@@ -1,3 +1,5 @@
+package realizations;
+
 import constants.ConstantPath;
 import constants.Constants;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -7,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
-class StandardFunctions {
+public class StandardFunctions {
 
     private SendMessage setMessage(Message message) {
         SendMessage sendMessage = new SendMessage();

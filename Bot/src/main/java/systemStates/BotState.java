@@ -1,4 +1,6 @@
-enum BotState {
+package systemStates;
+
+public enum BotState {
     ASK_HELP,
     ASK_AUTHORS,
     ASK_WORKS,
