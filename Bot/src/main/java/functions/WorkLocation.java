@@ -1,12 +1,10 @@
 package functions;
-
 import constants.Constants;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import realizations.PhotoWorks;
 import systemStates.State;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,17 +38,13 @@ public class WorkLocation extends PhotoWorks {
                 + currLocationLatitude.toString() + "%2C" + currLocationLongtitude.toString() + "~"
                 + workCoordinates[0] + "%2C" + workCoordinates[1]
                 + "&rtt=mt&ruri=~&z=12";
-
         return createPhotoObj(message, dataLine, state, numOfWorks, way);
 
     }
 
     public List<SendPhoto> sendWorksMsg(State state, List<Map<String, String>> dataList) {
-
         Message currMessage = state.getLastMessage();
-
         currRadius = Float.parseFloat(currMessage.getText());
-
 
         float deltaLatitude = (float) ((currRadius / 1.8) / 60);
         float deltaLongtitude = (float) ((currRadius / 1.2) / 60);
@@ -64,11 +58,9 @@ public class WorkLocation extends PhotoWorks {
             if (Math.abs(currLocationLatitude - Float.parseFloat(coords[0])) < deltaLatitude &&
                     Math.abs(currLocationLongtitude - Float.parseFloat(coords[1])) < deltaLongtitude) {
                 dataLines.add(currDataLine);
-
             }
         }
         return getPhotoList(state, dataLines);
-
     }
 
 

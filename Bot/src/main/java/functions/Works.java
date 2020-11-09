@@ -1,11 +1,9 @@
 package functions;
-
 import constants.Constants;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import realizations.PhotoWorks;
 import systemStates.State;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +14,6 @@ public class Works extends PhotoWorks {
         String link = dataLine.get(Constants.IDS);
         return createPhotoObj(message, dataLine, state, state.getTotalLocationPhotoWorks(), link);
     }
-
 
     public List<SendPhoto> sendWorksMsg(State state, List<Map<String, String>> dataList) {
         state.setTotalLocationPhotoWorks(Constants.NUMWORKS);

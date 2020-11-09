@@ -1,16 +1,12 @@
 package systemStates;
-
 import org.telegram.telegrambots.meta.api.objects.Message;
-
 import java.util.Date;
-
 
 
 public class State {
     private BotState botState;
     private Message lastMessage;
     private Integer numPhotoWorks = 1;
-    private Date timeWorkLoc;
     private Integer totalLocationPhotoWorks;
     private TypeMessage typeMessage;
 
@@ -58,13 +54,6 @@ public class State {
     public void updateBotState(BotState istatus, Message ilastMessage) {
         botState = istatus;
         lastMessage = ilastMessage;
-    }
-
-    public void setTimeWorkLoc(){
-        timeWorkLoc = new Date();
-    }
-    public Date getTimeWorkLoc(){
-        return timeWorkLoc;
     }
 
     public BotState getBotState() {

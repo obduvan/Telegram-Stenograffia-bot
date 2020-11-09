@@ -1,5 +1,4 @@
 package bot;
-
 import constants.ConstantPath;
 import constants.Constants;
 import functions.WorkLocation;
@@ -14,10 +13,7 @@ import realizations.StandardFunctions;
 import systemStates.BotState;
 import systemStates.ControlState;
 import systemStates.State;
-
-import javax.annotation.security.RunAs;
 import java.io.*;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -92,7 +88,6 @@ public class Bot extends TelegramLongPollingBot {
             if (checkLocMsg(message)) {
                 botState = BotState.WORKS_LOC_RAD;
             } else if (isStringInt(inputMsg) && (botStateLast.equals(BotState.WORKS_LOC_RAD) || botStateLast.equals(BotState.WORKS_LOC_INIT) || botStateLast.equals(BotState.WORKS_LOC_GET))) {
-//                 LastWorkLocState = controlState.getStructureUser(userId).getStateList().;
                 botState = BotState.WORKS_LOC_GET;
             } else {
                 botState = (botStateLast.equals(BotState.WORKS_LOC_RAD) || botStateLast.equals(BotState.WORKS_LOC_INIT) || botStateLast.equals(BotState.WORKS_LOC_GET)) ? BotState.WORKS_LOC_RAD : BotState.NONE;
@@ -196,8 +191,6 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotUsername() {
         return System.getenv(Constants.SYSNAMEBOT);
     }
-
-
 }
 
 
