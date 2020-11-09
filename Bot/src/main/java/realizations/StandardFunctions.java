@@ -22,9 +22,13 @@ public class StandardFunctions {
         return new String(Files.readAllBytes(Paths.get(ConstantPath.defaultMessage)));
     }
 
-    public SendMessage sendHelpMsg(Message message) throws IOException {
+    public SendMessage sendHelpMsg(Message message)  {
         SendMessage sendMessage = setMessage(message);
-        sendMessage.setText(getDefaultMessage());
+        try {
+            sendMessage.setText(getDefaultMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return sendMessage;
     }
 
@@ -32,8 +36,13 @@ public class StandardFunctions {
         return new String(Files.readAllBytes(Paths.get(ConstantPath.authorsMessage)));
     }
 
-    public SendMessage sendAuthorsMsg(Message message) throws IOException {
-        var text = getNameAuthors();
+    public SendMessage sendAuthorsMsg(Message message) {
+        String text = null;
+        try {
+            text = getNameAuthors();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         SendMessage sendMessage = setMessage(message);
         sendMessage.setText(text);
         return sendMessage;

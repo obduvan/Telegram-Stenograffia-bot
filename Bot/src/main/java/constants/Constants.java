@@ -23,6 +23,8 @@ public class Constants {
 
     public static final String NOARTINLOC = "А в таком радиусе работ нет :( \nПопробуйте выбрать другой!";
     public static final String SENDLOC = "Отправьте геопозицию";
+
+    public static final String SENDRADMSG= "Введите радиус (км), в пределах которого хотите увидеть работы";
     
     
 }

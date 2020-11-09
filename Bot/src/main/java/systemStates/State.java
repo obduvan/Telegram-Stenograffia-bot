@@ -1,20 +1,22 @@
 package systemStates;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
-import constants.Constants;
 
 import java.util.Date;
 
 
+
 public class State {
-    private BotState status;
+    private BotState botState;
     private Message lastMessage;
     private Integer numPhotoWorks = 1;
     private Date timeWorkLoc;
     private Integer totalLocationPhotoWorks;
+    private TypeMessage typeMessage;
 
     public State(BotState status, Message message){
-        updateStatus(status, message);
+        updateBotState(status, message);
+        setTypeMessage(botState);
     }
 
     public void setTotalLocationPhotoWorks(Integer col){
@@ -22,6 +24,22 @@ public class State {
     }
     public Integer getTotalLocationPhotoWorks(){
         return totalLocationPhotoWorks;
+    }
+
+    public void setTypeMessage(BotState botState){
+        switch (botState){
+            case WORKS_LOC_GET:
+            case ASK_WORKS:
+                typeMessage = TypeMessage.IS_PHOTO;
+                break;
+            default:
+                typeMessage = TypeMessage.IS_TEXT;
+                break;
+        }
+    }
+
+    public TypeMessage getTypeMessage(){
+        return typeMessage;
     }
 
 
@@ -37,10 +55,11 @@ public class State {
         return numPhotoWorks;
     }
 
-    public void updateStatus(BotState status, Message lastMessage) {
-        this.status = status;
-        this.lastMessage = lastMessage;
+    public void updateBotState(BotState istatus, Message ilastMessage) {
+        botState = istatus;
+        lastMessage = ilastMessage;
     }
+
     public void setTimeWorkLoc(){
         timeWorkLoc = new Date();
     }
@@ -48,8 +67,7 @@ public class State {
         return timeWorkLoc;
     }
 
-
-    public BotState getStatus() {
-        return this.status;
+    public BotState getBotState() {
+        return botState;
     }
 }

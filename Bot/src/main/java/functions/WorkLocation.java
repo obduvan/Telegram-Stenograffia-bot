@@ -24,13 +24,11 @@ public class WorkLocation extends PhotoWorks {
         return sendMessage;
     }
 
-
-
     public SendMessage sendRadMsg(Message message) {
         currLocationLatitude = message.getLocation().getLatitude();
         currLocationLongtitude = message.getLocation().getLongitude();
         var sendMessage = setMessage(message);
-        sendMessage.setText("Введите радиус (км), в пределах которого хотите увидеть работы");
+        sendMessage.setText(Constants.SENDRADMSG);
         return sendMessage;
     }
 
@@ -76,6 +74,7 @@ public class WorkLocation extends PhotoWorks {
 
     private List<SendPhoto> getPhotoList(State state, ArrayList<Map<String, String>> dataLines) {
         var totalWorksCount = dataLines.size();
+
         state.setTotalLocationPhotoWorks(totalWorksCount);
         int buffer = Constants.BUFFER;
         List<SendPhoto> sendPhotoList = new ArrayList<>();

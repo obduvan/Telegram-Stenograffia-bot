@@ -1,5 +1,4 @@
 package systemStates;
-import bot.Bot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +18,9 @@ public class StructureStates {
     }
 
     public void putState(State newState){
-        if (newState.getStatus() == BotState.NEXT_ART){
+        if (newState.getBotState() == BotState.NEXT_ART){
             for (int i = stateList.size() - 1; i >= 0; i--) {
-                switch (stateList.get(i).getStatus()){
+                switch (stateList.get(i).getBotState()){
                     case ASK_WORKS:
                     case WORKS_LOC_GET:
                         mainState = stateList.get(i);
