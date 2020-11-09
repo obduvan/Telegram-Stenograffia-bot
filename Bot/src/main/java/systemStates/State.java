@@ -11,18 +11,26 @@ public class State {
     private Message lastMessage;
     private Integer numPhotoWorks = 1;
     private Date timeWorkLoc;
+    private Integer totalLocationPhotoWorks;
 
     public State(BotState status, Message message){
         updateStatus(status, message);
     }
 
+    public void setTotalLocationPhotoWorks(Integer col){
+        totalLocationPhotoWorks = col;
+    }
+    public Integer getTotalLocationPhotoWorks(){
+        return totalLocationPhotoWorks;
+    }
+
+
     public Message getLastMessage(){
         return lastMessage;
     }
 
-    public void updateNumPhotoWorks(Integer num){
-        if (numPhotoWorks < Constants.NUMWORKS)
-            numPhotoWorks += num;
+    public void updateNumPhotoWorks(){
+        numPhotoWorks += 1;
     }
 
     public Integer getNumPhotoWorks(){

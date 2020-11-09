@@ -1,7 +1,5 @@
 package systemStates;
-
-import systemStates.BotState;
-import systemStates.State;
+import bot.Bot;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -20,6 +20,9 @@ public class Constants {
 
     public static final String SYSTOKEN = "TOKEN";
     public static final String SYSNAMEBOT = "NAMEBOT";
+
+    public static final String NOARTINLOC = "А в таком радиусе работ нет :( \nПопробуйте выбрать другой!";
+    public static final String SENDLOC = "Отправьте геопозицию";
     
     
 }

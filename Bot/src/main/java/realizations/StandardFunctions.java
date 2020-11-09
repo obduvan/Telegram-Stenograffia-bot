@@ -45,4 +45,17 @@ public class StandardFunctions {
         sendMessage.setText(text);
         return sendMessage;
     }
+
+    public SendMessage sendNoWorksMsg(Message message) {
+        var sendMessage = setMessage(message);
+        sendMessage.setText(Constants.NOARTINLOC);
+        return sendMessage;
+    }
+
+
+    public SendMessage sendLocMsg(Message message) {
+        var sendMessage = setMessage(message);
+        sendMessage.setText(Constants.SENDLOC);
+        return sendMessage;
+    }
 }

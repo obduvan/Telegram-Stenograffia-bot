@@ -72,7 +72,7 @@ public class Bot extends TelegramLongPollingBot {
     {
         try
         {
-            Integer.parseInt(s);
+            Float.parseFloat(s);
             return true;
         } catch (NumberFormatException ex)
         {
@@ -110,6 +110,23 @@ public class Bot extends TelegramLongPollingBot {
         controlState.updateStatesMap(userId, botState, message);
     }
 
+    private void createActionMap(State state) throws IOException {
+        ConcurrentHashMap<BotState, SendMessage> actionMapText = new ConcurrentHashMap<>();
+        ConcurrentHashMap<BotState, SendMessage> actionMapPhoto = new ConcurrentHashMap<>();
+
+        actionMapText.put(BotState.ASK_HELP, standardFunctions.sendHelpMsg(state.getLastMessage()));
+
+        actionMapText.put(BotState.ASK_AUTHORS, standardFunctions.sendAuthorsMsg(state.getLastMessage()));
+
+        actionMapText.put(BotState.WORKS_LOC_RAD, workLocation.sendRadMsg(state.getLastMessage()));
+
+        actionMapText.put(BotState.WORKS_LOC_INIT, standardFunctions.sendLocMsg(state.getLastMessage()));
+
+        actionMapPhoto.put(BotState.WORKS_LOC_INIT, standardFunctions.sendLocMsg(state.getLastMessage()));
+
+
+    }
+
     private void action(Integer userId) throws IOException {
         SendMessage sendMessage;
         var state = controlState.getStateUser(userId);
@@ -128,18 +145,17 @@ public class Bot extends TelegramLongPollingBot {
                     sendMsg(sendLocationPhotoList);
                     if (checkState(state))
                         sendMsg(standardFunctions.sendEndedWorks(state.getLastMessage()));
-                } else {
-                    sendMessage = workLocation.sendNoWorksMsg(state.getLastMessage());
+                }   else {
+                    sendMessage = standardFunctions.sendNoWorksMsg(state.getLastMessage());
                     sendMsg(sendMessage);
                 }
-
                 break;
             case WORKS_LOC_RAD:
                 sendMessage = workLocation.sendRadMsg(state.getLastMessage());
                 sendMsg(sendMessage);
                 break;
             case WORKS_LOC_INIT:
-                sendMessage = workLocation.sendLocMsg(state.getLastMessage());
+                sendMessage = standardFunctions.sendLocMsg(state.getLastMessage());
                 sendMsg(sendMessage);
                 break;
             case ASK_WORKS:
@@ -169,8 +185,8 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private boolean checkState(State state) {
-        if (state.getStatus() == BotState.ASK_WORKS)
-            return state.getNumPhotoWorks() >= Constants.NUMWORKS;
+        if (state.getStatus() == BotState.NEXT_ART || state.getStatus() == BotState.WORKS_LOC_GET)
+            return state.getNumPhotoWorks() > state.getTotalLocationPhotoWorks();
         return false;
     }
 
