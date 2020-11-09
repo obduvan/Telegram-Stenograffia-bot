@@ -9,6 +9,7 @@ public class State {
     private Message lastMessage;
     private Integer numPhotoWorks = 1;
     private Date timeWorkLoc;
+    private Integer totalLocationPhotoWorks;
 
     public State(BotState status, Message message){
         updateStatus(status, message);
@@ -18,8 +19,8 @@ public class State {
         return lastMessage;
     }
 
-    public void updateNumPhotoWorks(Integer num){
-        if (numPhotoWorks < Constants.NUMWORKS)
+    public void updateNumPhotoWorks(Integer num, Integer arrLen){
+        if (numPhotoWorks < arrLen)
             numPhotoWorks += num;
     }
 

@@ -30,7 +30,7 @@ public class Works {
         if (state.getNumPhotoWorks() < Constants.NUMWORKS){
             while (buffer != 0) {
                 sendPhotoList.add(sendMsg(state.getLastMessage(), dataList.get(state.getNumPhotoWorks() - 1), state));
-                state.updateNumPhotoWorks(1);
+                state.updateNumPhotoWorks(1, Constants.NUMWORKS);
                 buffer --;
             }
         }
