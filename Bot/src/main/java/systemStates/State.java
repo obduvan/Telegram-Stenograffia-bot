@@ -1,6 +1,5 @@
 package systemStates;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import java.util.Date;
 
 
 public class State {
@@ -38,13 +37,12 @@ public class State {
         return typeMessage;
     }
 
-
     public Message getLastMessage(){
         return lastMessage;
     }
 
     public void updateNumPhotoWorks(){
-        numPhotoWorks += 1;
+        numPhotoWorks ++;
     }
 
     public Integer getNumPhotoWorks(){

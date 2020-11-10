@@ -10,11 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 public class WorkLocation extends PhotoWorks {
-
     public Float currLocationLatitude = null;
     public Float currLocationLongtitude = null;
     public Float currRadius = null;
-    private Works works = new Works();
 
     public SendMessage setMessage(Message message) {
         SendMessage sendMessage = new SendMessage();
@@ -30,7 +28,6 @@ public class WorkLocation extends PhotoWorks {
         return sendMessage;
     }
 
-
     public SendPhoto sendMsg(Message message, Map<String, String> dataLine, State state, Integer numOfWorks) {
         String[] workCoordinates = dataLine.get(Constants.COORDINATES).split(" ");
 
@@ -39,7 +36,6 @@ public class WorkLocation extends PhotoWorks {
                 + workCoordinates[0] + "%2C" + workCoordinates[1]
                 + "&rtt=mt&ruri=~&z=12";
         return createPhotoObj(message, dataLine, state, numOfWorks, way);
-
     }
 
     public List<SendPhoto> sendWorksMsg(State state, List<Map<String, String>> dataList) {

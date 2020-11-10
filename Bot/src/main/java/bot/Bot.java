@@ -14,6 +14,7 @@ import systemStates.BotState;
 import systemStates.ControlState;
 import systemStates.State;
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -27,13 +28,17 @@ public class Bot extends TelegramLongPollingBot {
     private Works works;
     private StandardFunctions standardFunctions;
     private WorkLocation workLocation;
+    private HashMap<BotState, Function<Message, SendMessage>> actionMapText;
+    private HashMap<BotState, BiFunction<State, List<Map<String, String>>, List<SendPhoto>>> actionMapPhoto;
 
     public Bot(List<Map<String, String>> idataList) {
         dataList = idataList;
         controlState = new ControlState();
         works = new Works();
+        actionMapText = new HashMap<>();
         workLocation = new WorkLocation();
         standardFunctions = new StandardFunctions();
+        actionMapPhoto = new HashMap<>();
     }
 
     public void onUpdateReceived(Update update) {
@@ -42,6 +47,7 @@ public class Bot extends TelegramLongPollingBot {
         if (message != null) {
             try {
                 var userId = message.getFrom().getId();
+                initMapsMsg();
                 handleInputMessage(message, userId);
                 action(userId);
             } catch (IOException throwables) {
@@ -51,8 +57,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private ConcurrentHashMap<String, BotState> getBotStateMap() throws IOException {
-        ConcurrentHashMap<String, BotState> botStateMap = new ConcurrentHashMap<>() {
-        };
+        ConcurrentHashMap<String, BotState> botStateMap = new ConcurrentHashMap<>() {};
         botStateMap.put(Constants.START, BotState.ASK_HELP);
         var botStates = BotState.values();
         Scanner s = new Scanner(new File(ConstantPath.commands));
@@ -69,7 +74,7 @@ public class Bot extends TelegramLongPollingBot {
         return message.getLocation() != null;
     }
 
-    public boolean isStringInt(String s) {
+    public boolean isFloat(String s) {
         try {
             Float.parseFloat(s);
             return true;
@@ -84,13 +89,14 @@ public class Bot extends TelegramLongPollingBot {
         BotState botState;
         BotState botStateLast;
         botStateLast = controlState.existUser(userId) ? controlState.getStateUser(userId).getBotState() : BotState.NONE;
+
         if (inputMsg == null || !botStateMap.containsKey(inputMsg)) {
             if (checkLocMsg(message)) {
                 botState = BotState.WORKS_LOC_RAD;
-            } else if (isStringInt(inputMsg) && (botStateLast.equals(BotState.WORKS_LOC_RAD) || botStateLast.equals(BotState.WORKS_LOC_INIT) || botStateLast.equals(BotState.WORKS_LOC_GET))) {
+            } else if (isFloat(inputMsg) && (botStateLast.equals(BotState.WORKS_LOC_RAD) || botStateLast.equals(BotState.WORKS_LOC_GET))) {
                 botState = BotState.WORKS_LOC_GET;
             } else {
-                botState = (botStateLast.equals(BotState.WORKS_LOC_RAD) || botStateLast.equals(BotState.WORKS_LOC_INIT) || botStateLast.equals(BotState.WORKS_LOC_GET)) ? BotState.WORKS_LOC_RAD : BotState.NONE;
+                botState = (botStateLast.equals(BotState.WORKS_LOC_RAD) || botStateLast.equals(BotState.WORKS_LOC_GET)) ? BotState.WORKS_LOC_RAD : BotState.NONE;
             }
         } else {
             botState = botStateMap.get(inputMsg);
@@ -104,32 +110,29 @@ public class Bot extends TelegramLongPollingBot {
         controlState.updateStatesMap(userId, botState, message);
     }
 
-    private ConcurrentHashMap<BotState, Function<Message, SendMessage>> createMapTextMessage() {
-        ConcurrentHashMap<BotState, Function<Message, SendMessage>> actionMapText = new ConcurrentHashMap<>();
+    private void initMapsMsg(){
+        createMapPhotoMessage();
+        createMapTextMessage();
+    }
 
+    private void createMapTextMessage() {
         actionMapText.put(BotState.ASK_HELP, standardFunctions::sendHelpMsg);
         actionMapText.put(BotState.ASK_AUTHORS, standardFunctions::sendAuthorsMsg);
         actionMapText.put(BotState.WORKS_LOC_RAD, workLocation::sendRadMsg);
         actionMapText.put(BotState.WORKS_LOC_INIT, standardFunctions::sendLocMsg);
-
-        return actionMapText;
     }
 
-    private ConcurrentHashMap<BotState, BiFunction<State, List<Map<String, String>>, List<SendPhoto>>> createMapPhotoMessage() {
-        ConcurrentHashMap<BotState, BiFunction<State, List<Map<String, String>>, List<SendPhoto>>> actionMapPhoto = new ConcurrentHashMap<>();
+    private void createMapPhotoMessage() {
         actionMapPhoto.put(BotState.WORKS_LOC_GET, workLocation::sendWorksMsg);
         actionMapPhoto.put(BotState.ASK_WORKS, works::sendWorksMsg);
-
-        return actionMapPhoto;
-
     }
 
     private SendMessage getSendMessage(State state) {
-        return createMapTextMessage().get(state.getBotState()).apply(state.getLastMessage());
+        return actionMapText.get(state.getBotState()).apply(state.getLastMessage());
     }
 
     private List<SendPhoto> getListPhotoMessage(State state) {
-        return createMapPhotoMessage().get(state.getBotState()).apply(state, dataList);
+        return actionMapPhoto.get(state.getBotState()).apply(state, dataList);
     }
 
     private void checkEmpty(List<SendPhoto> sendLocationPhotoList, State state) {
