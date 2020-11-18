@@ -1,3 +1,5 @@
+package dataBase;
+
 import constants.Constants;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,6 +43,7 @@ public class ConnectDataBase {
             map.put(Constants.TITLE, rs.getString(Constants.TITLE));
             map.put(Constants.PHOTOS, parsePhotos(rs.getString(Constants.IDS))[0]);
             map.put(Constants.IDS, rs.getString(Constants.IDS));
+            map.put(Constants.COORDINATES, rs.getString(Constants.COORDINATES));
             dataList.add(map);
         }
 

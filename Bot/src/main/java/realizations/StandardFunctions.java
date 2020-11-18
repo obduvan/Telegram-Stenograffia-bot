@@ -1,3 +1,5 @@
+package realizations;
+
 import constants.ConstantPath;
 import constants.Constants;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -7,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
-class StandardFunctions {
+public class StandardFunctions {
 
     private SendMessage setMessage(Message message) {
         SendMessage sendMessage = new SendMessage();
@@ -20,20 +22,27 @@ class StandardFunctions {
         return new String(Files.readAllBytes(Paths.get(ConstantPath.defaultMessage)));
     }
 
-    public SendMessage sendHelpMsg(Message message) throws IOException {
+    public SendMessage sendHelpMsg(Message message)  {
         SendMessage sendMessage = setMessage(message);
-        sendMessage.setText(getDefaultMessage());
+        try {
+            sendMessage.setText(getDefaultMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return sendMessage;
     }
 
     private String getNameAuthors() throws IOException {
-
-
         return new String(Files.readAllBytes(Paths.get(ConstantPath.authorsMessage)));
     }
 
-    public SendMessage sendAuthorsMsg(Message message) throws IOException {
-        var text = getNameAuthors();
+    public SendMessage sendAuthorsMsg(Message message) {
+        String text = null;
+        try {
+            text = getNameAuthors();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         SendMessage sendMessage = setMessage(message);
         sendMessage.setText(text);
         return sendMessage;
@@ -43,6 +52,19 @@ class StandardFunctions {
         var text = Constants.ENDEDWORKSMSG;
         SendMessage sendMessage = setMessage(message);
         sendMessage.setText(text);
+        return sendMessage;
+    }
+
+    public SendMessage sendNoWorksMsg(Message message) {
+        var sendMessage = setMessage(message);
+        sendMessage.setText(Constants.NOARTINLOC);
+        return sendMessage;
+    }
+
+
+    public SendMessage sendLocMsg(Message message) {
+        var sendMessage = setMessage(message);
+        sendMessage.setText(Constants.SENDLOC);
         return sendMessage;
     }
 }
