@@ -11,10 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import realizations.StandardFunctions;
-import systemStates.BotState;
-import systemStates.ControlState;
-import systemStates.State;
-import systemStates.StatesValidator;
+import systemStates.*;
 
 import javax.swing.text.StyledEditorKit;
 import java.io.*;
@@ -48,8 +45,7 @@ public class Bot extends TelegramLongPollingBot {
         actionMapPhoto = new HashMap<>();
         statesValidator = new StatesValidator();
         geoValidations = new GeoValidations();
-        botStateMap = new HashMap<>();
-        getBotStateMap();
+        botStateMap = new CreateBotstateMap().getBotStateMap();
         initMapsMsg();
     }
 
@@ -61,20 +57,6 @@ public class Bot extends TelegramLongPollingBot {
             handleInputMessage(message, userId);
             action(userId);
         }
-    }
-
-    private void getBotStateMap() throws IOException {
-        botStateMap.put(Constants.START, BotState.ASK_HELP);
-        var botStates = BotState.values();
-        Scanner s = new Scanner(new File(ConstantPath.commands));
-        int k = 0;
-        while (s.hasNext()) {
-            botStateMap.put(s.next(), botStates[k]);
-            System.out.println(s.next()+" " + botStates[k].toString());
-            k++;
-        }
-        s.close();
-
     }
 
     private void handleInputMessage(Message message, Integer userId) {

@@ -26,5 +26,4 @@ public class GeoMathTestClass {
         double actual = geoMath.getGeoPointsDistance(100.000000, -100.000000, 200.000000, -200.000000);
         Assert.assertEquals(-1, actual, 1e-5);
     }
-
 }
