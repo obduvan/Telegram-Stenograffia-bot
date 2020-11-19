@@ -1,4 +1,5 @@
 package bot;
+import Validations.GeoValidations;
 import constants.ConstantPath;
 import constants.Constants;
 import functions.WorkLocation;
@@ -13,6 +14,9 @@ import realizations.StandardFunctions;
 import systemStates.BotState;
 import systemStates.ControlState;
 import systemStates.State;
+import systemStates.StatesValidator;
+
+import javax.swing.text.StyledEditorKit;
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
@@ -28,10 +32,13 @@ public class Bot extends TelegramLongPollingBot {
     private Works works;
     private StandardFunctions standardFunctions;
     private WorkLocation workLocation;
+    private StatesValidator statesValidator;
+    private GeoValidations geoValidations;
     private HashMap<BotState, Function<String, SendMessage>> actionMapText;
     private HashMap<BotState, BiFunction<State, List<Map<String, String>>, List<SendPhoto>>> actionMapPhoto;
+    private HashMap<String, BotState> botStateMap;
 
-    public Bot(List<Map<String, String>> idataList) {
+    public Bot(List<Map<String, String>> idataList) throws IOException {
         dataList = idataList;
         controlState = new ControlState();
         works = new Works();
@@ -39,75 +46,43 @@ public class Bot extends TelegramLongPollingBot {
         workLocation = new WorkLocation();
         standardFunctions = new StandardFunctions();
         actionMapPhoto = new HashMap<>();
-
+        statesValidator = new StatesValidator();
+        geoValidations = new GeoValidations();
+        botStateMap = new HashMap<>();
+        getBotStateMap();
         initMapsMsg();
     }
 
     public void onUpdateReceived(Update update) {
-            Message message = update.getMessage();
+        Message message = update.getMessage();
 
         if (message != null) {
-            try {
-                var userId = message.getFrom().getId();
-                handleInputMessage(message, userId);
-                action(userId);
-            } catch (IOException throwables) {
-                throwables.printStackTrace();
-            }
+            var userId = message.getFrom().getId();
+            handleInputMessage(message, userId);
+            action(userId);
         }
     }
 
-    private ConcurrentHashMap<String, BotState> getBotStateMap() throws IOException {
-        ConcurrentHashMap<String, BotState> botStateMap = new ConcurrentHashMap<>() {};
+    private void getBotStateMap() throws IOException {
         botStateMap.put(Constants.START, BotState.ASK_HELP);
         var botStates = BotState.values();
         Scanner s = new Scanner(new File(ConstantPath.commands));
         int k = 0;
         while (s.hasNext()) {
             botStateMap.put(s.next(), botStates[k]);
+            System.out.println(s.next()+" " + botStates[k].toString());
             k++;
         }
         s.close();
-        return botStateMap;
+
     }
 
-    private boolean checkLocMsg(Message message) {
-        return message.getLocation() != null;
-    }
-
-    public boolean isFloat(String s) {
-        try {
-            Float.parseFloat(s);
-            return true;
-        } catch (NumberFormatException ex) {
-            return false;
-        }
-    }
-
-    private BotState checkBotState(Message message, Integer userId) throws IOException {
-        String inputMsg = message.getText();
-        var botStateMap = getBotStateMap();
-        BotState botState;
-        BotState botStateLast;
-        botStateLast = controlState.existUser(userId) ? controlState.getStateUser(userId).getBotState() : BotState.NONE;
-
-        if (inputMsg == null || !botStateMap.containsKey(inputMsg)) {
-            if (checkLocMsg(message)) {
-                botState = BotState.WORKS_LOC_RAD;
-            } else if (isFloat(inputMsg) && (botStateLast.equals(BotState.WORKS_LOC_RAD) || botStateLast.equals(BotState.WORKS_LOC_GET))) {
-                botState = BotState.WORKS_LOC_GET;
-            } else {
-                botState = (botStateLast.equals(BotState.WORKS_LOC_RAD) || botStateLast.equals(BotState.WORKS_LOC_GET)) ? BotState.WORKS_LOC_RAD : BotState.NONE;
-            }
-        } else {
-            botState = botStateMap.get(inputMsg);
-        }
-        return botState;
-    }
-
-    private void handleInputMessage(Message message, Integer userId) throws IOException {
+    private void handleInputMessage(Message message, Integer userId) {
         System.out.println(message);
-        var botState = checkBotState(message, userId);
+        BotState botStateLast = controlState.existUser(userId) ? controlState.getStateUser(userId).getBotState() : BotState.NONE;
+        boolean isGeoMsg = geoValidations.checkLocMsg(message);
+
+        var botState = statesValidator.checkBotState(message.getText(), botStateLast, isGeoMsg, botStateMap);
         controlState.updateStatesMap(userId, botState, message);
     }
 
