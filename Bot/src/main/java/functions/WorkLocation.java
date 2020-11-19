@@ -42,9 +42,6 @@ public class WorkLocation extends PhotoWorks {
         Message currMessage = state.getLastMessage();
         currRadius = Float.parseFloat(currMessage.getText());
 
-//        float deltaLatitude = (float) ((currRadius / 1.8) / 60);
-//        float deltaLongtitude = (float) ((currRadius / 1.2) / 60);
-
         double currLocationLatitudeRads = Math.toRadians(currLocationLatitude);
         double currLocationLongtitudeRads = Math.toRadians(currLocationLongtitude);
 
