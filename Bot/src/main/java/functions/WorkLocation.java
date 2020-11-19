@@ -32,9 +32,9 @@ public class WorkLocation extends PhotoWorks {
         String[] workCoordinates = dataLine.get(Constants.COORDINATES).split(" ");
 
         String way = Constants.PathYandexMapLoc
-                + currLocationLatitude.toString() + "%2C" + currLocationLongtitude.toString() + "~"
-                + workCoordinates[0] + "%2C" + workCoordinates[1]
-                + "&rtt=mt&ruri=~&z=12";
+                + currLocationLatitude.toString() + Constants.YA_MAP_PATH_2C + currLocationLongtitude.toString() + "~"
+                + workCoordinates[0] + Constants.YA_MAP_PATH_2C + workCoordinates[1]
+                + Constants.YA_MAP_PATH_PART;
         return createPhotoObj(message, dataLine, state, numOfWorks, way);
     }
 
@@ -42,8 +42,7 @@ public class WorkLocation extends PhotoWorks {
         Message currMessage = state.getLastMessage();
         currRadius = Float.parseFloat(currMessage.getText());
 
-        double currLocationLatitudeRads = Math.toRadians(currLocationLatitude);
-        double currLocationLongtitudeRads = Math.toRadians(currLocationLongtitude);
+        GeoMath geoMath = new GeoMath();
 
         ArrayList<Map<String, String>> dataLines = new ArrayList<>();
 
@@ -51,15 +50,8 @@ public class WorkLocation extends PhotoWorks {
             Map<String, String> currDataLine = dataList.get(i);
             String[] coords = currDataLine.get(Constants.COORDINATES).split(" ");
 
-            double artLatitude = Math.toRadians(Double.parseDouble(coords[0]));
-            double artLongtitude = Math.toRadians(Double.parseDouble(coords[1]));
-
-            double halfDeltaLatitude = (artLatitude - currLocationLatitudeRads) / 2;
-            double halfDeltaLongtitude = (artLongtitude - currLocationLongtitudeRads) / 2;
-
-            double distance = 2*6371*Math.asin(Math.sqrt(Math.sin(halfDeltaLatitude) * Math.sin(halfDeltaLatitude) +
-                    Math.cos(artLatitude) * Math.cos(currLocationLatitudeRads) *
-                            Math.sin(halfDeltaLongtitude) * Math.sin(halfDeltaLongtitude)));
+            Double distance = geoMath.getGeoPointsDistance(Double.parseDouble(coords[0]), (double)currLocationLatitude,
+                    Double.parseDouble(coords[1]), (double)currLocationLongtitude);
 
             if (distance < currRadius) {
                 dataLines.add(currDataLine);
