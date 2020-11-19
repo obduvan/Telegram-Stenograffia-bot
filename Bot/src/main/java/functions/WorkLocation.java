@@ -32,9 +32,9 @@ public class WorkLocation extends PhotoWorks {
         String[] workCoordinates = dataLine.get(Constants.COORDINATES).split(" ");
 
         String way = Constants.PathYandexMapLoc
-                + currLocationLatitude.toString() + "%2C" + currLocationLongtitude.toString() + "~"
-                + workCoordinates[0] + "%2C" + workCoordinates[1]
-                + "&rtt=mt&ruri=~&z=12";
+                + currLocationLatitude.toString() + Constants.YA_MAP_PATH_2C + currLocationLongtitude.toString() + "~"
+                + workCoordinates[0] + Constants.YA_MAP_PATH_2C + workCoordinates[1]
+                + Constants.YA_MAP_PATH_PART;
         return createPhotoObj(message, dataLine, state, numOfWorks, way);
     }
 
@@ -57,7 +57,7 @@ public class WorkLocation extends PhotoWorks {
             double halfDeltaLatitude = (artLatitude - currLocationLatitudeRads) / 2;
             double halfDeltaLongtitude = (artLongtitude - currLocationLongtitudeRads) / 2;
 
-            double distance = 2*6371*Math.asin(Math.sqrt(Math.sin(halfDeltaLatitude) * Math.sin(halfDeltaLatitude) +
+            double distance = Constants.EARTH_DIAMETER*Math.asin(Math.sqrt(Math.sin(halfDeltaLatitude) * Math.sin(halfDeltaLatitude) +
                     Math.cos(artLatitude) * Math.cos(currLocationLatitudeRads) *
                             Math.sin(halfDeltaLongtitude) * Math.sin(halfDeltaLongtitude)));
 
