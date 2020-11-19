@@ -42,8 +42,8 @@ public class WorkLocation extends PhotoWorks {
         Message currMessage = state.getLastMessage();
         currRadius = Float.parseFloat(currMessage.getText());
 
-        float deltaLatitude = (float) ((currRadius / 1.8) / 60);
-        float deltaLongtitude = (float) ((currRadius / 1.2) / 60);
+        double currLocationLatitudeRads = Math.toRadians(currLocationLatitude);
+        double currLocationLongtitudeRads = Math.toRadians(currLocationLongtitude);
 
         ArrayList<Map<String, String>> dataLines = new ArrayList<>();
 
@@ -51,8 +51,17 @@ public class WorkLocation extends PhotoWorks {
             Map<String, String> currDataLine = dataList.get(i);
             String[] coords = currDataLine.get(Constants.COORDINATES).split(" ");
 
-            if (Math.abs(currLocationLatitude - Float.parseFloat(coords[0])) < deltaLatitude &&
-                    Math.abs(currLocationLongtitude - Float.parseFloat(coords[1])) < deltaLongtitude) {
+            double artLatitude = Math.toRadians(Double.parseDouble(coords[0]));
+            double artLongtitude = Math.toRadians(Double.parseDouble(coords[1]));
+
+            double halfDeltaLatitude = (artLatitude - currLocationLatitudeRads) / 2;
+            double halfDeltaLongtitude = (artLongtitude - currLocationLongtitudeRads) / 2;
+
+            double distance = 2*6371*Math.asin(Math.sqrt(Math.sin(halfDeltaLatitude) * Math.sin(halfDeltaLatitude) +
+                    Math.cos(artLatitude) * Math.cos(currLocationLatitudeRads) *
+                            Math.sin(halfDeltaLongtitude) * Math.sin(halfDeltaLongtitude)));
+
+            if (distance < currRadius) {
                 dataLines.add(currDataLine);
             }
         }
