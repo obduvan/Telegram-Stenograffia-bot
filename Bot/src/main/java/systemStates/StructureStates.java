@@ -1,5 +1,4 @@
 package systemStates;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,7 @@ public class StructureStates {
             mainState = newState;
         }
     }
+
     public List<State> getStateList(){
         return stateList;
     }

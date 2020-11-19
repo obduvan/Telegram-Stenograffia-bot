@@ -26,6 +26,7 @@ public class ControlState {
     public State getStateUser(Integer userId){
         return statesMap.get(userId).getMainState();
     }
+
     public StructureStates getStructureUser(Integer userId){
         return statesMap.get(userId);
     }

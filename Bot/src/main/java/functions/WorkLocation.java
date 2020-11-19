@@ -10,32 +10,32 @@ import java.util.List;
 import java.util.Map;
 
 public class WorkLocation extends PhotoWorks {
-    public Float currLocationLatitude = null;
-    public Float currLocationLongtitude = null;
-    public Float currRadius = null;
+    private Float currLocationLatitude = null;
+    private Float currLocationLongtitude = null;
+    private Float currRadius = null;
 
-    public SendMessage setMessage(Message message) {
+    public SendMessage setMessage(String chatId) {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(message.getChatId().toString());
+        sendMessage.setChatId(chatId);
         return sendMessage;
     }
 
-    public SendMessage sendRadMsg(Message message) {
-        currLocationLatitude = message.getLocation().getLatitude();
-        currLocationLongtitude = message.getLocation().getLongitude();
-        var sendMessage = setMessage(message);
+    public SendMessage sendRadMsg(float latitude, float longtitude, String chatId) {
+        currLocationLatitude = latitude;
+        currLocationLongtitude = longtitude;
+        var sendMessage = setMessage(chatId);
         sendMessage.setText(Constants.SENDRADMSG);
         return sendMessage;
     }
 
-    public SendPhoto sendMsg(Message message, Map<String, String> dataLine, State state, Integer numOfWorks) {
+    public SendPhoto sendMsg(Map<String, String> dataLine, State state, Integer numOfWorks) {
         String[] workCoordinates = dataLine.get(Constants.COORDINATES).split(" ");
 
         String way = Constants.PathYandexMapLoc
                 + currLocationLatitude.toString() + "%2C" + currLocationLongtitude.toString() + "~"
                 + workCoordinates[0] + "%2C" + workCoordinates[1]
                 + "&rtt=mt&ruri=~&z=12";
-        return createPhotoObj(message, dataLine, state, numOfWorks, way);
+        return createPhotoObj(dataLine, state, numOfWorks, way);
     }
 
     public List<SendPhoto> sendWorksMsg(State state, List<Map<String, String>> dataList) {
@@ -77,7 +77,7 @@ public class WorkLocation extends PhotoWorks {
         List<SendPhoto> sendPhotoList = new ArrayList<>();
 
         while (buffer != 0 && state.getNumPhotoWorks() <= totalWorksCount) {
-            sendPhotoList.add(sendMsg(state.getLastMessage(), dataLines.get(state.getNumPhotoWorks() - 1),
+            sendPhotoList.add(sendMsg(dataLines.get(state.getNumPhotoWorks() - 1),
                     state,
                     dataLines.size()));
             buffer--;
