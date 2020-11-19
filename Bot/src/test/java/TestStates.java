@@ -1,4 +1,3 @@
-import Validations.GeoValidations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,5 +37,26 @@ public class TestStates {
             Assert.assertEquals(checkBotState,states[i]);
             i++;
         }
+    }
+
+    @Test
+    public void testGoodOrderRequest_1() {
+        String commandsSecond = "/n";
+        var botStateSecond = statesValidator.checkBotState(commandsSecond, BotState.ASK_WORKS, false, botStateMap);
+        Assert.assertEquals(botStateSecond, BotState.NEXT_ART);
+    }
+
+    @Test
+    public void testBadOrderRequest_1() {
+        String commandsSecond = "/p";
+        var botStateSecond = statesValidator.checkBotState(commandsSecond, BotState.ASK_WORKS, false, botStateMap);
+        Assert.assertEquals(botStateSecond, BotState.NONE);
+    }
+
+    @Test
+    public void testGoodOrderRequest_2() {
+        String commandsSecond = "/n";
+        var botStateSecond = statesValidator.checkBotState(commandsSecond, BotState.WORKS_LOC_RAD, false, botStateMap);
+        Assert.assertEquals(botStateSecond, BotState.NEXT_ART);
     }
 }
