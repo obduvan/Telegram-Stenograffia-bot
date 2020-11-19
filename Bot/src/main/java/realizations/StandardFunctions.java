@@ -49,6 +49,13 @@ public class StandardFunctions {
         return sendMessage;
     }
 
+    public SendMessage sendNoneMsg(String chatId){
+        var text = Constants.NONE_MSG;
+        SendMessage sendMessage = setMessage(chatId);
+        sendMessage.setText(text);
+        return sendMessage;
+    }
+
     public SendMessage sendEndedWorks(String chatId){
         var text = Constants.ENDEDWORKSMSG;
         SendMessage sendMessage = setMessage(chatId);
@@ -61,7 +68,6 @@ public class StandardFunctions {
         sendMessage.setText(Constants.NOARTINLOC);
         return sendMessage;
     }
-
 
     public SendMessage sendLocMsg(String chatId) {
         var sendMessage = setMessage(chatId);

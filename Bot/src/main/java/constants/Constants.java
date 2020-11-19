@@ -13,6 +13,7 @@ public class Constants {
     public static final String IDS = "IDS";
     public static final String PHOTOS = "PHOTOS";
     public static final String COORDINATES = "COORDINATES";
+    public static final String NONE_MSG = "Такой команды не существует";
 
     public static final Integer BUFFER = 5;
     public static final Integer NUMWORKS = 114;

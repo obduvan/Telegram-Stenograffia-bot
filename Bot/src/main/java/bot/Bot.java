@@ -49,7 +49,6 @@ public class Bot extends TelegramLongPollingBot {
         if (message != null) {
             try {
                 var userId = message.getFrom().getId();
-
                 handleInputMessage(message, userId);
                 action(userId);
             } catch (IOException throwables) {
@@ -118,6 +117,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void createMapTextMessage() {
+        actionMapText.put(BotState.NONE, standardFunctions::sendNoneMsg);
         actionMapText.put(BotState.ASK_HELP, standardFunctions::sendHelpMsg);
         actionMapText.put(BotState.ASK_AUTHORS, standardFunctions::sendAuthorsMsg);
         actionMapText.put(BotState.WORKS_LOC_INIT, standardFunctions::sendLocMsg);
@@ -129,7 +129,6 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private SendMessage getSendMessage(State state) {
-
         return actionMapText.get(state.getBotState()).apply(state.getChatId());
     }
 
