@@ -24,5 +24,10 @@ public class Constants {
     public static final String NOARTINLOC = "А в таком радиусе работ нет :( \nПопробуйте выбрать другой!";
     public static final String SENDLOC = "Отправьте текущую геопозицию";
 
-    public static final String SENDRADMSG= "Введите радиус (км), в пределах которого хотите увидеть работы";
+    public static final String SENDRADMSG = "Введите радиус (км), в пределах которого хотите увидеть работы";
+
+    public static final Integer EARTH_DIAMETER = 2*6371;
+
+    public static final String YA_MAP_PATH_PART = "&rtt=mt&ruri=~&z=12";
+    public static final String YA_MAP_PATH_2C = "%2C";
 }
