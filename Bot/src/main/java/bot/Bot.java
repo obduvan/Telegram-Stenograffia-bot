@@ -36,8 +36,9 @@ public class Bot extends TelegramLongPollingBot {
     private GeoValidations geoValidations;
     private HashMap<BotState, Function<String, SendMessage>> actionMapText;
     private HashMap<BotState, BiFunction<State, List<Map<String, String>>, List<SendPhoto>>> actionMapPhoto;
+    private HashMap<String, BotState> botStateMap;
 
-    public Bot(List<Map<String, String>> idataList) {
+    public Bot(List<Map<String, String>> idataList) throws IOException {
         dataList = idataList;
         controlState = new ControlState();
         works = new Works();
@@ -47,30 +48,41 @@ public class Bot extends TelegramLongPollingBot {
         actionMapPhoto = new HashMap<>();
         statesValidator = new StatesValidator();
         geoValidations = new GeoValidations();
-
+        botStateMap = new HashMap<>();
+        getBotStateMap();
         initMapsMsg();
     }
 
     public void onUpdateReceived(Update update) {
-            Message message = update.getMessage();
+        Message message = update.getMessage();
 
         if (message != null) {
-            try {
-                var userId = message.getFrom().getId();
-                handleInputMessage(message, userId);
-                action(userId);
-            } catch (IOException throwables) {
-                throwables.printStackTrace();
-            }
+            var userId = message.getFrom().getId();
+            handleInputMessage(message, userId);
+            action(userId);
         }
     }
 
-    private void handleInputMessage(Message message, Integer userId) throws IOException {
+    private void getBotStateMap() throws IOException {
+        botStateMap.put(Constants.START, BotState.ASK_HELP);
+        var botStates = BotState.values();
+        Scanner s = new Scanner(new File(ConstantPath.commands));
+        int k = 0;
+        while (s.hasNext()) {
+            botStateMap.put(s.next(), botStates[k]);
+            System.out.println(s.next()+" " + botStates[k].toString());
+            k++;
+        }
+        s.close();
+
+    }
+
+    private void handleInputMessage(Message message, Integer userId) {
         System.out.println(message);
         BotState botStateLast = controlState.existUser(userId) ? controlState.getStateUser(userId).getBotState() : BotState.NONE;
         boolean isGeoMsg = geoValidations.checkLocMsg(message);
 
-        var botState = statesValidator.checkBotState(message.getText(), botStateLast, isGeoMsg);
+        var botState = statesValidator.checkBotState(message.getText(), botStateLast, isGeoMsg, botStateMap);
         controlState.updateStatesMap(userId, botState, message);
     }
 

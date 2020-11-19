@@ -1,19 +1,11 @@
 package systemStates;
+import java.util.HashMap;
 
-import constants.ConstantPath;
-import constants.Constants;
-import org.telegram.telegrambots.meta.api.objects.Message;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class StatesValidator {
 
-    public BotState checkBotState(String textMessage, BotState botStateLast, boolean isGeoMsg ) throws IOException {
+    public BotState checkBotState(String textMessage, BotState botStateLast, boolean isGeoMsg, HashMap<String, BotState> botStateMap ){
         String inputMsg = textMessage;
-        var botStateMap = getBotStateMap();
         BotState botState;
 
         if (inputMsg == null || !botStateMap.containsKey(inputMsg)) {
@@ -30,20 +22,6 @@ public class StatesValidator {
         return botState;
     }
 
-    private ConcurrentHashMap<String, BotState> getBotStateMap() throws IOException {
-        ConcurrentHashMap<String, BotState> botStateMap = new ConcurrentHashMap<>() {};
-        botStateMap.put(Constants.START, BotState.ASK_HELP);
-        var botStates = BotState.values();
-        Scanner s = new Scanner(new File(ConstantPath.commands));
-        int k = 0;
-        while (s.hasNext()) {
-            botStateMap.put(s.next(), botStates[k]);
-            k++;
-        }
-        s.close();
-        return botStateMap;
-    }
-
     public boolean isFloat(String s) {
         try {
             Float.parseFloat(s);
@@ -52,6 +30,4 @@ public class StatesValidator {
             return false;
         }
     }
-
-
 }
