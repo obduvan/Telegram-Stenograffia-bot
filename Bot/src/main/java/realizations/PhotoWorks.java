@@ -2,15 +2,14 @@ package realizations;
 
 import constants.Constants;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import systemStates.State;
 import java.util.Map;
 
 public class PhotoWorks {
-    public SendPhoto createPhotoObj(Message message, Map<String, String> dataLine, State state,Integer colPhotos, String link){
+    public SendPhoto createPhotoObj(Map<String, String> dataLine, State state,Integer colPhotos, String link){
         SendPhoto sendPhoto = new SendPhoto();
-        sendPhoto.setChatId(message.getChatId().toString());
+        sendPhoto.setChatId(state.getChatId());
 
         String numPhoto = state.getNumPhotoWorks().toString();
         String title = dataLine.get(Constants.TITLE);

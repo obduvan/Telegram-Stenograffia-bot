@@ -8,17 +8,14 @@ public class State {
     private Integer numPhotoWorks = 1;
     private Integer totalLocationPhotoWorks;
     private TypeMessage typeMessage;
+    private String chatId;
+    private float latitude;
+    private float longtitude;
 
     public State(BotState status, Message message){
         updateBotState(status, message);
         setTypeMessage(botState);
-    }
-
-    public void setTotalLocationPhotoWorks(Integer col){
-        totalLocationPhotoWorks = col;
-    }
-    public Integer getTotalLocationPhotoWorks(){
-        return totalLocationPhotoWorks;
+        setFields(message);
     }
 
     public void setTypeMessage(BotState botState){
@@ -32,6 +29,28 @@ public class State {
                 break;
         }
     }
+
+    private void setFields(Message message){
+        chatId = message.getChatId().toString();
+        if (botState == BotState.WORKS_LOC_RAD){
+            latitude = message.getLocation().getLatitude();
+            longtitude = message.getLocation().getLongitude();
+        }
+    }
+
+    public void setTotalLocationPhotoWorks(Integer col){
+        totalLocationPhotoWorks = col;
+    }
+
+    public Integer getTotalLocationPhotoWorks(){
+        return totalLocationPhotoWorks;
+    }
+
+    public float getLatitude(){return  latitude; }
+
+    public float getLongtitude(){return longtitude; }
+
+    public String getChatId(){ return chatId; }
 
     public TypeMessage getTypeMessage(){
         return typeMessage;

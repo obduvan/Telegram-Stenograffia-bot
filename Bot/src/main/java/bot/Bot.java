@@ -28,7 +28,7 @@ public class Bot extends TelegramLongPollingBot {
     private Works works;
     private StandardFunctions standardFunctions;
     private WorkLocation workLocation;
-    private HashMap<BotState, Function<Message, SendMessage>> actionMapText;
+    private HashMap<BotState, Function<String, SendMessage>> actionMapText;
     private HashMap<BotState, BiFunction<State, List<Map<String, String>>, List<SendPhoto>>> actionMapPhoto;
 
     public Bot(List<Map<String, String>> idataList) {
@@ -39,15 +39,17 @@ public class Bot extends TelegramLongPollingBot {
         workLocation = new WorkLocation();
         standardFunctions = new StandardFunctions();
         actionMapPhoto = new HashMap<>();
+
+        initMapsMsg();
     }
 
     public void onUpdateReceived(Update update) {
-        Message message = update.getMessage();
+            Message message = update.getMessage();
 
         if (message != null) {
             try {
                 var userId = message.getFrom().getId();
-                initMapsMsg();
+
                 handleInputMessage(message, userId);
                 action(userId);
             } catch (IOException throwables) {
@@ -118,7 +120,6 @@ public class Bot extends TelegramLongPollingBot {
     private void createMapTextMessage() {
         actionMapText.put(BotState.ASK_HELP, standardFunctions::sendHelpMsg);
         actionMapText.put(BotState.ASK_AUTHORS, standardFunctions::sendAuthorsMsg);
-        actionMapText.put(BotState.WORKS_LOC_RAD, workLocation::sendRadMsg);
         actionMapText.put(BotState.WORKS_LOC_INIT, standardFunctions::sendLocMsg);
     }
 
@@ -128,7 +129,8 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private SendMessage getSendMessage(State state) {
-        return actionMapText.get(state.getBotState()).apply(state.getLastMessage());
+
+        return actionMapText.get(state.getBotState()).apply(state.getChatId());
     }
 
     private List<SendPhoto> getListPhotoMessage(State state) {
@@ -140,19 +142,24 @@ public class Bot extends TelegramLongPollingBot {
         if (!sendLocationPhotoList.isEmpty()) {
             sendMsg(sendLocationPhotoList);
             if (checkState(state))
-                sendMsg(standardFunctions.sendEndedWorks(state.getLastMessage()));
+                sendMsg(standardFunctions.sendEndedWorks(state.getChatId()));
         } else {
-            sendMessage = standardFunctions.sendNoWorksMsg(state.getLastMessage());
+            sendMessage = standardFunctions.sendNoWorksMsg(state.getChatId());
             sendMsg(sendMessage);
         }
     }
 
     private void action(Integer userId) {
         var state = controlState.getStateUser(userId);
+        SendMessage sendMessage;
 
         switch (state.getTypeMessage()) {
             case IS_TEXT:
-                SendMessage sendMessage = getSendMessage(state);
+                if (state.getBotState() == BotState.WORKS_LOC_RAD)
+                    sendMessage = workLocation.sendRadMsg(state.getLatitude(), state.getLongtitude(), state.getChatId());
+                else{
+                    sendMessage = getSendMessage(state);
+                }
                 sendMsg(sendMessage);
                 break;
             case IS_PHOTO:
