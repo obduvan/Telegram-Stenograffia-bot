@@ -42,8 +42,7 @@ public class WorkLocation extends PhotoWorks {
         Message currMessage = state.getLastMessage();
         currRadius = Float.parseFloat(currMessage.getText());
 
-        double currLocationLatitudeRads = Math.toRadians(currLocationLatitude);
-        double currLocationLongtitudeRads = Math.toRadians(currLocationLongtitude);
+        GeoMath geoMath = new GeoMath();
 
         ArrayList<Map<String, String>> dataLines = new ArrayList<>();
 
@@ -51,15 +50,8 @@ public class WorkLocation extends PhotoWorks {
             Map<String, String> currDataLine = dataList.get(i);
             String[] coords = currDataLine.get(Constants.COORDINATES).split(" ");
 
-            double artLatitude = Math.toRadians(Double.parseDouble(coords[0]));
-            double artLongtitude = Math.toRadians(Double.parseDouble(coords[1]));
-
-            double halfDeltaLatitude = (artLatitude - currLocationLatitudeRads) / 2;
-            double halfDeltaLongtitude = (artLongtitude - currLocationLongtitudeRads) / 2;
-
-            double distance = Constants.EARTH_DIAMETER*Math.asin(Math.sqrt(Math.sin(halfDeltaLatitude) * Math.sin(halfDeltaLatitude) +
-                    Math.cos(artLatitude) * Math.cos(currLocationLatitudeRads) *
-                            Math.sin(halfDeltaLongtitude) * Math.sin(halfDeltaLongtitude)));
+            Double distance = geoMath.getGeoPointsDistance(Double.parseDouble(coords[0]), (double)currLocationLatitude,
+                    Double.parseDouble(coords[1]), (double)currLocationLongtitude);
 
             if (distance < currRadius) {
                 dataLines.add(currDataLine);
