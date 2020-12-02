@@ -2,7 +2,20 @@ package functions;
 
 import constants.Constants;
 
+import javax.inject.Singleton;
+import javax.print.DocFlavor;
+import java.security.Signature;
+
 public class GeoMath {
+    private  static GeoMath instance;
+
+    public static synchronized GeoMath getInstance(){
+        if (instance == null){
+            instance = new GeoMath();
+        }
+        return instance;
+    }
+
     public Double getGeoPointsDistance(Double lat1, Double lat2, Double long1, Double long2) {
 
         if (lat1 > 90 || lat1 < -90 || lat2 > 90 || lat2 < -90 || long1 > 180 || long1 < -180 || long2 > 180 || long2 < -180) return -1.0;

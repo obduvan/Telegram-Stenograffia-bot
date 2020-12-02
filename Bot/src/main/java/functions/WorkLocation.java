@@ -18,7 +18,7 @@ public class WorkLocation extends PhotoWorks {
 
     public WorkLocation() {
         sendMessage = new SendMessage();
-        geoMath = new GeoMath();
+        geoMath = GeoMath.getInstance();
     }
 
     public SendMessage setMessage(String chatId) {
