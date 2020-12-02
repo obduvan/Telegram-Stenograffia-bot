@@ -6,7 +6,11 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ControlState {
-    private ConcurrentHashMap<Integer, StructureStates> statesMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, StructureStates> statesMap;
+
+    public ControlState(){
+         statesMap = new ConcurrentHashMap<>();
+    }
 
     public void updateStatesMap(Integer userId, BotState botState, Message message) {
         var newState = new State(botState, message);

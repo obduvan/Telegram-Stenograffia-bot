@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.*;
 
 
@@ -70,7 +69,6 @@ public class Bot extends TelegramLongPollingBot {
         int k = 0;
         while (s.hasNext()) {
             botStateMap.put(s.next(), botStates[k]);
-            System.out.println(s.next()+" " + botStates[k].toString());
             k++;
         }
         s.close();

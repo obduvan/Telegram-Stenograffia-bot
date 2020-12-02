@@ -10,12 +10,18 @@ import java.util.List;
 import java.util.Map;
 
 public class WorkLocation extends PhotoWorks {
-    private Float currLocationLatitude = null;
-    private Float currLocationLongtitude = null;
-    private Float currRadius = null;
+    private Float currLocationLatitude;
+    private Float currLocationLongtitude;
+    private Float currRadius;
+    private SendMessage sendMessage;
+    private GeoMath geoMath;
+
+    public WorkLocation() {
+        sendMessage = new SendMessage();
+        geoMath = new GeoMath();
+    }
 
     public SendMessage setMessage(String chatId) {
-        SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         return sendMessage;
     }
@@ -28,7 +34,7 @@ public class WorkLocation extends PhotoWorks {
         return sendMessage;
     }
 
-    public SendPhoto sendMsg(Map<String, String> dataLine, State state, Integer numOfWorks) {
+    public SendPhoto sendMsg(Message lastMessage, Map<String, String> dataLine, State state, Integer numOfWorks) {
         String[] workCoordinates = dataLine.get(Constants.COORDINATES).split(" ");
 
         String way = Constants.PathYandexMapLoc
@@ -37,12 +43,10 @@ public class WorkLocation extends PhotoWorks {
                 + Constants.YA_MAP_PATH_PART;
         return createPhotoObj(dataLine, state, numOfWorks, way);
     }
+
     public List<SendPhoto> sendWorksMsg(State state, List<Map<String, String>> dataList) {
         Message currMessage = state.getLastMessage();
         currRadius = Float.parseFloat(currMessage.getText());
-
-        double currLocationLatitudeRads = Math.toRadians(currLocationLatitude);
-        double currLocationLongtitudeRads = Math.toRadians(currLocationLongtitude);
 
         ArrayList<Map<String, String>> dataLines = new ArrayList<>();
 
@@ -50,15 +54,8 @@ public class WorkLocation extends PhotoWorks {
             Map<String, String> currDataLine = dataList.get(i);
             String[] coords = currDataLine.get(Constants.COORDINATES).split(" ");
 
-            double artLatitude = Math.toRadians(Double.parseDouble(coords[0]));
-            double artLongtitude = Math.toRadians(Double.parseDouble(coords[1]));
-
-            double halfDeltaLatitude = (artLatitude - currLocationLatitudeRads) / 2;
-            double halfDeltaLongtitude = (artLongtitude - currLocationLongtitudeRads) / 2;
-
-            double distance = 2*6371*Math.asin(Math.sqrt(Math.sin(halfDeltaLatitude) * Math.sin(halfDeltaLatitude) +
-                    Math.cos(artLatitude) * Math.cos(currLocationLatitudeRads) *
-                            Math.sin(halfDeltaLongtitude) * Math.sin(halfDeltaLongtitude)));
+            Double distance = geoMath.getGeoPointsDistance(Double.parseDouble(coords[0]), (double)currLocationLatitude,
+                    Double.parseDouble(coords[1]), (double)currLocationLongtitude);
 
             if (distance < currRadius) {
                 dataLines.add(currDataLine);
@@ -76,9 +73,7 @@ public class WorkLocation extends PhotoWorks {
         List<SendPhoto> sendPhotoList = new ArrayList<>();
 
         while (buffer != 0 && state.getNumPhotoWorks() <= totalWorksCount) {
-            sendPhotoList.add(sendMsg(dataLines.get(state.getNumPhotoWorks() - 1),
-                    state,
-                    dataLines.size()));
+            sendPhotoList.add(sendMsg(state.getLastMessage(), dataLines.get(state.getNumPhotoWorks() - 1),state, dataLines.size()));
             buffer--;
             state.updateNumPhotoWorks();
         }
