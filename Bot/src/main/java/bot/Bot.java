@@ -53,6 +53,24 @@ public class Bot extends TelegramLongPollingBot {
         initMapsMsg();
     }
 
+    private void getBotStateMap() throws IOException {
+        botStateMap.put(Constants.START, BotState.ASK_HELP);
+        var botStates = BotState.values();
+        Scanner s = new Scanner(new File(ConstantPath.commands));
+        int k = 0;
+        while (s.hasNext()) {
+            botStateMap.put(s.next(), botStates[k]);
+            k++;
+        }
+        s.close();
+
+    }
+
+    private void initMapsMsg(){
+        createMapPhotoMessage();
+        createMapTextMessage();
+    }
+
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
 
@@ -63,19 +81,6 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private void getBotStateMap() throws IOException {
-        botStateMap.put(Constants.START, BotState.ASK_HELP);
-        var botStates = BotState.values();
-        Scanner s = new Scanner(new File(ConstantPath.commands));
-        int k = 0;
-        while (s.hasNext()) {
-            botStateMap.put(s.next(), botStates[k]);
-            System.out.println(s.next()+" " + botStates[k].toString());
-            k++;
-        }
-        s.close();
-
-    }
 
     private void handleInputMessage(Message message, Integer userId) {
         System.out.println(message);
@@ -86,10 +91,6 @@ public class Bot extends TelegramLongPollingBot {
         controlState.updateStatesMap(userId, botState, message);
     }
 
-    private void initMapsMsg(){
-        createMapPhotoMessage();
-        createMapTextMessage();
-    }
 
     private void createMapTextMessage() {
         actionMapText.put(BotState.NONE, standardFunctions::sendNoneMsg);
