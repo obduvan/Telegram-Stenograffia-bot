@@ -1,9 +1,10 @@
 package bot;
 import Validations.GeoValidations;
-import constants.ConstantPath;
 import constants.Constants;
+import functions.Route;
 import functions.WorkLocation;
 import functions.Works;
+import inlineKeyboard.InlineKeyboardWork;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -11,18 +12,10 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import realizations.StandardFunctions;
-import systemStates.BotState;
-import systemStates.ControlState;
-import systemStates.State;
-import systemStates.StatesValidator;
+import systemStates.*;
 
-import javax.swing.text.StyledEditorKit;
 import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 import java.util.function.*;
 
 
@@ -37,6 +30,8 @@ public class Bot extends TelegramLongPollingBot {
     private HashMap<BotState, Function<String, SendMessage>> actionMapText;
     private HashMap<BotState, BiFunction<State, List<Map<String, String>>, List<SendPhoto>>> actionMapPhoto;
     private HashMap<String, BotState> botStateMap;
+    private InlineKeyboardWork changeInlineKeyboard;
+    private Route route;
 
     public Bot(List<Map<String, String>> idataList) throws IOException {
         dataList = idataList;
@@ -49,38 +44,42 @@ public class Bot extends TelegramLongPollingBot {
         statesValidator = new StatesValidator();
         geoValidations = new GeoValidations();
         botStateMap = new HashMap<>();
-        getBotStateMap();
+        route = new Route();
+
+        changeInlineKeyboard = new InlineKeyboardWork();
+        botStateMap = CreateBotStateMap.getInstance().getBotStateMap();
+
         initMapsMsg();
     }
 
-    private void getBotStateMap() throws IOException {
-        botStateMap.put(Constants.START, BotState.ASK_HELP);
-        var botStates = BotState.values();
-        Scanner s = new Scanner(new File(ConstantPath.commands));
-        int k = 0;
-        while (s.hasNext()) {
-            botStateMap.put(s.next(), botStates[k]);
-            k++;
-        }
-        s.close();
-
-    }
-
     private void initMapsMsg(){
-        createMapPhotoMessage();
+        createMapWorkMessage();
         createMapTextMessage();
     }
 
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-
         if (message != null) {
             var userId = message.getFrom().getId();
             handleInputMessage(message, userId);
             action(userId);
         }
+        else if (update.hasCallbackQuery()){
+            var newMessage = changeInlineKeyboard.getChangedKeyboard(update);
+            updateUserRouteList(update.getCallbackQuery().getFrom().getId());
+                try {
+                    execute(newMessage);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
     }
 
+    private void updateUserRouteList(Integer userId){
+        var workCoordinates = changeInlineKeyboard.getWorkCoordinates();
+        var isAddWork = changeInlineKeyboard.isAddWorkRoute();
+        controlState.updateUserRouteList(userId, workCoordinates, isAddWork);
+    }
 
     private void handleInputMessage(Message message, Integer userId) {
         System.out.println(message);
@@ -91,7 +90,6 @@ public class Bot extends TelegramLongPollingBot {
         controlState.updateStatesMap(userId, botState, message);
     }
 
-
     private void createMapTextMessage() {
         actionMapText.put(BotState.NONE, standardFunctions::sendNoneMsg);
         actionMapText.put(BotState.ASK_HELP, standardFunctions::sendHelpMsg);
@@ -99,7 +97,7 @@ public class Bot extends TelegramLongPollingBot {
         actionMapText.put(BotState.WORKS_LOC_INIT, standardFunctions::sendLocMsg);
     }
 
-    private void createMapPhotoMessage() {
+    private void createMapWorkMessage() {
         actionMapPhoto.put(BotState.WORKS_LOC_GET, workLocation::sendWorksMsg);
         actionMapPhoto.put(BotState.ASK_WORKS, works::sendWorksMsg);
     }
@@ -132,6 +130,12 @@ public class Bot extends TelegramLongPollingBot {
             case IS_TEXT:
                 if (state.getBotState() == BotState.WORKS_LOC_RAD)
                     sendMessage = workLocation.sendRadMsg(state.getLatitude(), state.getLongtitude(), state.getChatId());
+
+                if(state.getBotState() == BotState.GET_ROUTE) {
+                    var routeList = controlState.getUserRouteList(Integer.parseInt(state.getChatId()));
+                    sendMessage = route.sendRouteMsg(state.getChatId(), routeList);
+
+                }
                 else{
                     sendMessage = getSendMessage(state);
                 }
@@ -163,7 +167,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private boolean checkState(State state) {
         if (state.getBotState() == BotState.NEXT_ART || state.getBotState() == BotState.WORKS_LOC_GET)
-            return state.getNumPhotoWorks() > state.getTotalLocationPhotoWorks();
+            return state.getNumPhotoWorks() > state.getTotalPhotoWorks();
         return false;
     }
 

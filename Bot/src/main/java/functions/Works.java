@@ -10,13 +10,17 @@ import java.util.Map;
 public class Works extends PhotoWorks {
 
     public SendPhoto createPhotoMsg(Map<String, String> dataLine, State state){
+        String[] workCoordinates = dataLine.get(Constants.COORDINATES).split(" ");
+
+        String forRoadCoordinates = String.format("%s %s",workCoordinates[0], workCoordinates[1]);
         String link = dataLine.get(Constants.IDS);
-        return createPhotoObj(dataLine, state, state.getTotalLocationPhotoWorks(), link);
+        return createPhotoObj(dataLine, state, link, forRoadCoordinates);
     }
 
     public List<SendPhoto> sendWorksMsg(State state, List<Map<String, String>> dataList) {
-        state.setTotalLocationPhotoWorks(Constants.NUMWORKS);
-        var totalArts = state.getTotalLocationPhotoWorks();
+
+        state.setTotalPhotoWorks(Constants.COLWORKS);
+        var totalArts = state.getTotalPhotoWorks();
         List<SendPhoto> sendPhotoList = new ArrayList<>();
         int buffer = Constants.BUFFER;
         if (state.getNumPhotoWorks() < totalArts){

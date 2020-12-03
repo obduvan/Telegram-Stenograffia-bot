@@ -2,9 +2,6 @@ package functions;
 
 import constants.Constants;
 
-import javax.inject.Singleton;
-import javax.print.DocFlavor;
-import java.security.Signature;
 
 public class GeoMath {
     private  static GeoMath instance;

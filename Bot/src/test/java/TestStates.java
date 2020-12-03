@@ -2,7 +2,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import systemStates.BotState;
-import systemStates.CreateBotstateMap;
+import systemStates.CreateBotStateMap;
 import systemStates.StatesValidator;
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class TestStates {
 
     @Before
     public void setup() throws IOException {
-        botStateMap = new CreateBotstateMap().getBotStateMap();
+        botStateMap = new CreateBotStateMap().getBotStateMap();
         statesValidator = new StatesValidator();
     }
 

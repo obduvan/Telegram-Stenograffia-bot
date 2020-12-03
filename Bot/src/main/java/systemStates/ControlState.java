@@ -2,14 +2,14 @@ package systemStates;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ControlState {
     private ConcurrentHashMap<Integer, StructureStates> statesMap;
 
     public ControlState(){
-         statesMap = new ConcurrentHashMap<>();
+        statesMap = new ConcurrentHashMap<>();
     }
 
     public void updateStatesMap(Integer userId, BotState botState, Message message) {
@@ -20,7 +20,17 @@ public class ControlState {
         }
         else{
             statesMap.get(userId).putState(newState);
+            statesMap.get(userId).clearUserRouteList();
         }
+    }
+
+    public void updateUserRouteList(Integer userId, String workCoordinates, boolean isAddWork){
+        statesMap.get(userId).updateUserRouteList(workCoordinates, isAddWork);             // а если ключ не найдется?
+    }
+
+
+    public List<String> getUserRouteList(Integer userId){
+        return statesMap.get(userId).getRouteList();
     }
 
     public boolean existUser(Integer userId){

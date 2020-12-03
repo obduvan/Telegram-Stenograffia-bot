@@ -7,6 +7,9 @@ public class Constants {
     public static final String AUTHORS = "/authors";
     public static final String WORKS = "/works";
     public static final String NEXTART = "/n";
+    public static final String GET_ROUTE = "/route";
+
+
 
     public static final String PathYandexMapLoc = "https://yandex.ru/maps/54/yekaterinburg/?ll=60.6125%2C56.8575&mode=routes&rtext=";
     public static final String TITLE = "TITLE";
@@ -16,7 +19,7 @@ public class Constants {
     public static final String NONE_MSG = "Такой команды не существует";
 
     public static final Integer BUFFER = 5;
-    public static final Integer NUMWORKS = 114;
+    public static final Integer COLWORKS = 114;
     public static final String ENDEDWORKSMSG = "Работ больше нет :(";
 
     public static final String SYSTOKEN = "TOKEN";

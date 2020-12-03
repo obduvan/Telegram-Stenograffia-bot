@@ -6,7 +6,7 @@ public class State {
     private BotState botState;
     private Message lastMessage;
     private Integer numPhotoWorks = 1;
-    private Integer totalLocationPhotoWorks;
+    private Integer totalPhotoWorks;
     private TypeMessage typeMessage;
     private String chatId;
     private float latitude;
@@ -38,12 +38,11 @@ public class State {
         }
     }
 
-    public void setTotalLocationPhotoWorks(Integer col){
-        totalLocationPhotoWorks = col;
+    public void  setTotalPhotoWorks(Integer col){
+        totalPhotoWorks = col;
     }
-
-    public Integer getTotalLocationPhotoWorks(){
-        return totalLocationPhotoWorks;
+    public Integer getTotalPhotoWorks(){
+        return totalPhotoWorks;
     }
 
     public float getLatitude(){return  latitude; }

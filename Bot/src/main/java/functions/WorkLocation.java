@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import realizations.PhotoWorks;
 import systemStates.State;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -34,14 +35,16 @@ public class WorkLocation extends PhotoWorks {
         return sendMessage;
     }
 
-    public SendPhoto sendMsg(Message lastMessage, Map<String, String> dataLine, State state, Integer numOfWorks) {
+    public SendPhoto sendMsg( Map<String, String> dataLine, State state) {
         String[] workCoordinates = dataLine.get(Constants.COORDINATES).split(" ");
+
+        String forRoadCoordinates = String.format("%s %s",workCoordinates[0], workCoordinates[1]);
 
         String way = Constants.PathYandexMapLoc
                 + currLocationLatitude.toString() + Constants.YA_MAP_PATH_2C + currLocationLongtitude.toString() + "~"
                 + workCoordinates[0] + Constants.YA_MAP_PATH_2C + workCoordinates[1]
                 + Constants.YA_MAP_PATH_PART;
-        return createPhotoObj(dataLine, state, numOfWorks, way);
+        return createPhotoObj(dataLine, state, way, forRoadCoordinates);
     }
 
     public List<SendPhoto> sendWorksMsg(State state, List<Map<String, String>> dataList) {
@@ -50,7 +53,7 @@ public class WorkLocation extends PhotoWorks {
 
         ArrayList<Map<String, String>> dataLines = new ArrayList<>();
 
-        for (int i = 0; i < Constants.NUMWORKS; i++) {
+        for (int i = 0; i < Constants.COLWORKS; i++) {
             Map<String, String> currDataLine = dataList.get(i);
             String[] coords = currDataLine.get(Constants.COORDINATES).split(" ");
 
@@ -68,12 +71,12 @@ public class WorkLocation extends PhotoWorks {
     private List<SendPhoto> getPhotoList(State state, ArrayList<Map<String, String>> dataLines) {
         var totalWorksCount = dataLines.size();
 
-        state.setTotalLocationPhotoWorks(totalWorksCount);
+        state.setTotalPhotoWorks(totalWorksCount);
         int buffer = Constants.BUFFER;
         List<SendPhoto> sendPhotoList = new ArrayList<>();
 
         while (buffer != 0 && state.getNumPhotoWorks() <= totalWorksCount) {
-            sendPhotoList.add(sendMsg(state.getLastMessage(), dataLines.get(state.getNumPhotoWorks() - 1),state, dataLines.size()));
+            sendPhotoList.add(sendMsg(dataLines.get(state.getNumPhotoWorks() - 1),state));
             buffer--;
             state.updateNumPhotoWorks();
         }
