@@ -1,13 +1,18 @@
 package functions;
 
+import com.google.gson.Gson;
 import constants.Constants;
+import okhttp3.ResponseBody;
+import org.json.JSONObject;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 
 public class GeoMath {
-    public Double getGeoPointsDistance(Double lat1, Double lat2, Double long1, Double long2) {
+    public static Double getGeoPointsDistance(Double lat1, Double lat2, Double long1, Double long2) {
 
         if (lat1 > 90 || lat1 < -90 || lat2 > 90 || lat2 < -90 || long1 > 180 || long1 < -180 || long2 > 180 || long2 < -180) return -1.0;
 
@@ -28,15 +33,42 @@ public class GeoMath {
         return distance;
     }
 
-    public ArrayList<double[]> getOptimalWay(ArrayList<double[]> coords) {
+    public static ArrayList<double[]> getOptimalWay(ArrayList<double[]> coords) {
+
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=41.6655101,-73.89188969999998&key=";
+
+        final HttpClient httpClient = new HttpClient();
+
+        Gson gson = new Gson();
 
         ArrayList<double[]> res = new ArrayList<>(coords);
+
+        final ResponseBody response;
+
+        try {
+            response = httpClient.post(url);
+////                    JSONObject jsonObject = new JSONObject(response);
+//            var objectToParse = gson.fromJson(response, Map.class);
+//            Object a = objectToParse.get("rows");
+            System.out.println (response.toString());
+        } catch (IOException e) {
+            e.printStackTrace ( );
+        }
 
         for (var i = 0; i < res.size() - 1; i++) {
             double minWay = Double.MAX_VALUE;
             int indexWithMinWay = 0;
             for (var j = i+1; j < res.size(); j++) {
-                double way = getGeoPointsDistance(res.get(i)[0], res.get(j)[0], res.get(i)[1], res.get(j)[1]);
+                var lat1 = res.get(i)[0];
+                var lat2 = res.get(j)[0];
+                var long1 = res.get(i)[1];
+                var long2 = res.get(j)[1];
+
+
+                var way = 0.0;
+
+
+
                 if (way < minWay) {
                     minWay = way;
                     indexWithMinWay = j;
@@ -45,5 +77,9 @@ public class GeoMath {
             Collections.swap(res, i + 1, indexWithMinWay);
         }
         return res;
+    }
+
+    public static void main(String[] args) {
+        getOptimalWay(new ArrayList<double[]>());
     }
 }
