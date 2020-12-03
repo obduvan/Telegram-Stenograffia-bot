@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Route {
     public SendMessage sendRouteMsg(String chatId, List<String> routeList){
-        SendMessage sendMessage = new SendMessage();        // это все твоё
+        SendMessage sendMessage = new SendMessage();        // routeList - лист с координатами вида: [широта долгота, широта долгота1, широта долгота2, ...]
         sendMessage.setChatId(chatId);
         sendMessage.setText("ROUTE");
         return sendMessage;
