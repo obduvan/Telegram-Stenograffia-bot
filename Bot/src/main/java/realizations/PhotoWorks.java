@@ -13,8 +13,13 @@ import java.util.Map;
 
 public class PhotoWorks {
 
+    private SendPhoto getPhotoObj(String chatId){
+        SendPhoto sendPhoto = new SendPhoto();
+        sendPhoto.setChatId(chatId);
+        return sendPhoto;
+    }
 
-    public SendPhoto createPhotoObj(Map<String, String> dataLine, State state, String link, String workCoordinates){
+    public SendPhoto createPhotoBoardObj(Map<String, String> dataLine, State state, String link, String workCoordinates){
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton button = new InlineKeyboardButton();
 
@@ -27,15 +32,26 @@ public class PhotoWorks {
 
         inlineKeyboardMarkup.setKeyboard(rowList);
 
-        SendPhoto sendPhoto = new SendPhoto();
-        sendPhoto.setChatId(state.getChatId());
+        SendPhoto sendPhoto = getPhotoObj(state.getChatId());
 
         String numPhoto = state.getNumPhotoWorks().toString();
         String title = dataLine.get(Constants.TITLE);
         String photo = dataLine.get(Constants.PHOTOS);
         var colPhotos = state.getTotalPhotoWorks();
         sendPhoto.setCaption(String.format("%s   %s/%s\n%s", title, numPhoto, colPhotos, link));
-        sendPhoto.setPhoto(photo).setReplyMarkup(inlineKeyboardMarkup);;
+        sendPhoto.setPhoto(photo).setReplyMarkup(inlineKeyboardMarkup);
+        return sendPhoto;
+    }
+
+    public SendPhoto createPhotoObj(Map<String, String> dataLine, State state, String link){
+        SendPhoto sendPhoto = getPhotoObj(state.getChatId());
+
+        String numPhoto = state.getNumPhotoWorks().toString();
+        String title = dataLine.get(Constants.TITLE);
+        String photo = dataLine.get(Constants.PHOTOS);
+        var colPhotos = state.getTotalPhotoWorks();
+        sendPhoto.setCaption(String.format("%s   %s/%s\n%s", title, numPhoto, colPhotos, link));
+        sendPhoto.setPhoto(photo);
         return sendPhoto;
     }
 }

@@ -1,4 +1,6 @@
 package systemStates;
+import bot.Bot;
+
 import java.util.HashMap;
 
 
@@ -10,7 +12,10 @@ public class StatesValidator {
 
         if (inputMsg == null || !botStateMap.containsKey(inputMsg)) {
             if (isGeoMsg) {
-                botState = BotState.WORKS_LOC_RAD;
+                if (botStateLast.equals(BotState.GET_ROUTE))
+                    botState = BotState.GET_ROUTE_URL;
+                else
+                    botState = BotState.WORKS_LOC_RAD;
             } else if (isFloat(inputMsg) && (botStateLast.equals(BotState.WORKS_LOC_RAD) || botStateLast.equals(BotState.WORKS_LOC_GET))) {
                 botState = BotState.WORKS_LOC_GET;
             } else {

@@ -11,6 +11,9 @@ public class State {
     private String chatId;
     private float latitude;
     private float longtitude;
+    private float latitudeLast;
+    private float longtitudeLast;
+
 
     public State(BotState status, Message message){
         updateBotState(status, message);
@@ -36,6 +39,10 @@ public class State {
             latitude = message.getLocation().getLatitude();
             longtitude = message.getLocation().getLongitude();
         }
+        else if (botState == BotState.GET_ROUTE_URL){
+            latitudeLast = message.getLocation().getLatitude();
+            longtitudeLast = message.getLocation().getLongitude();
+        }
     }
 
     public void  setTotalPhotoWorks(Integer col){
@@ -44,6 +51,8 @@ public class State {
     public Integer getTotalPhotoWorks(){
         return totalPhotoWorks;
     }
+    public float getLatitudeLast(){return latitudeLast;}
+    public float getLongtitudeLast(){return longtitudeLast;}
 
     public float getLatitude(){return  latitude; }
 

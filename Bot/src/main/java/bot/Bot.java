@@ -81,9 +81,26 @@ public class Bot extends TelegramLongPollingBot {
         controlState.updateUserRouteList(userId, workCoordinates, isAddWork);
     }
 
+    private BotState getLastState(Integer userId){
+        BotState lastState = BotState.NONE;
+        if (controlState.existUser(userId)){
+            var listStates = controlState.getStructureUser(userId).getStateList();
+            for (int i = listStates.size() - 1; i >= 0; i--){
+                var state = listStates.get(i);
+                if (state.getBotState() != BotState.NONE){
+                    lastState = state.getBotState();
+                    break;
+                }
+            }
+        }
+
+        return lastState;
+    }
+
     private void handleInputMessage(Message message, Integer userId) {
         System.out.println(message);
-        BotState botStateLast = controlState.existUser(userId) ? controlState.getStateUser(userId).getBotState() : BotState.NONE;
+//        BotState botStateLast = controlState.existUser(userId) ? controlState.getStateUser(userId).getBotState() : BotState.NONE;
+        BotState botStateLast = getLastState(userId);
         boolean isGeoMsg = geoValidations.checkLocMsg(message);
 
         var botState = statesValidator.checkBotState(message.getText(), botStateLast, isGeoMsg, botStateMap);
@@ -95,6 +112,7 @@ public class Bot extends TelegramLongPollingBot {
         actionMapText.put(BotState.ASK_HELP, standardFunctions::sendHelpMsg);
         actionMapText.put(BotState.ASK_AUTHORS, standardFunctions::sendAuthorsMsg);
         actionMapText.put(BotState.WORKS_LOC_INIT, standardFunctions::sendLocMsg);
+        actionMapText.put(BotState.GET_ROUTE, standardFunctions::sendLocRouteMsg);
     }
 
     private void createMapWorkMessage() {
@@ -131,9 +149,9 @@ public class Bot extends TelegramLongPollingBot {
                 if (state.getBotState() == BotState.WORKS_LOC_RAD){
                     sendMessage = workLocation.sendRadMsg(state.getLatitude(), state.getLongtitude(), state.getChatId());
                 }
-                else if (state.getBotState() == BotState.GET_ROUTE) {
+                else if (state.getBotState() == BotState.GET_ROUTE_URL) {
                     var routeList = controlState.getUserRouteList(Integer.parseInt(state.getChatId()));
-                    sendMessage = route.sendRouteMsg(state.getChatId(), routeList);
+                    sendMessage = route.sendRouteMsg(state.getChatId(), routeList, state.getLatitudeLast(), state.getLongtitudeLast());
                 }
                 else{
                     sendMessage = getSendMessage(state);

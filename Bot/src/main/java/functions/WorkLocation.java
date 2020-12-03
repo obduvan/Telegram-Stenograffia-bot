@@ -6,7 +6,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import realizations.PhotoWorks;
 import systemStates.State;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +43,7 @@ public class WorkLocation extends PhotoWorks {
                 + currLocationLatitude.toString() + Constants.YA_MAP_PATH_2C + currLocationLongtitude.toString() + "~"
                 + workCoordinates[0] + Constants.YA_MAP_PATH_2C + workCoordinates[1]
                 + Constants.YA_MAP_PATH_PART;
-        return createPhotoObj(dataLine, state, way, forRoadCoordinates);
+        return createPhotoBoardObj(dataLine, state, way, forRoadCoordinates);
     }
 
     public List<SendPhoto> sendWorksMsg(State state, List<Map<String, String>> dataList) {

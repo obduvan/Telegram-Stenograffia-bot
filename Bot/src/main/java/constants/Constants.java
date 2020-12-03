@@ -8,8 +8,7 @@ public class Constants {
     public static final String WORKS = "/works";
     public static final String NEXTART = "/n";
     public static final String GET_ROUTE = "/route";
-
-
+    public static final String GET_LAST_LOC = "Отправьте геопозицию, где бы вы хотели закончить маршрут";
 
     public static final String PathYandexMapLoc = "https://yandex.ru/maps/54/yekaterinburg/?ll=60.6125%2C56.8575&mode=routes&rtext=";
     public static final String TITLE = "TITLE";

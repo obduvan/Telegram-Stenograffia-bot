@@ -10,11 +10,8 @@ import java.util.Map;
 public class Works extends PhotoWorks {
 
     public SendPhoto createPhotoMsg(Map<String, String> dataLine, State state){
-        String[] workCoordinates = dataLine.get(Constants.COORDINATES).split(" ");
-
-        String forRoadCoordinates = String.format("%s %s",workCoordinates[0], workCoordinates[1]);
         String link = dataLine.get(Constants.IDS);
-        return createPhotoObj(dataLine, state, link, forRoadCoordinates);
+        return createPhotoObj(dataLine, state, link);
     }
 
     public List<SendPhoto> sendWorksMsg(State state, List<Map<String, String>> dataList) {

@@ -9,5 +9,6 @@ public enum BotState {
     WORKS_LOC_RAD,
     WORKS_LOC_GET,
     GET_ROUTE,
+    GET_ROUTE_URL,
     NONE,
 }
