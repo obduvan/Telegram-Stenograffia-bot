@@ -128,13 +128,12 @@ public class Bot extends TelegramLongPollingBot {
 
         switch (state.getTypeMessage()) {
             case IS_TEXT:
-                if (state.getBotState() == BotState.WORKS_LOC_RAD)
+                if (state.getBotState() == BotState.WORKS_LOC_RAD){
                     sendMessage = workLocation.sendRadMsg(state.getLatitude(), state.getLongtitude(), state.getChatId());
-
-                if(state.getBotState() == BotState.GET_ROUTE) {
+                }
+                else if (state.getBotState() == BotState.GET_ROUTE) {
                     var routeList = controlState.getUserRouteList(Integer.parseInt(state.getChatId()));
                     sendMessage = route.sendRouteMsg(state.getChatId(), routeList);
-
                 }
                 else{
                     sendMessage = getSendMessage(state);
