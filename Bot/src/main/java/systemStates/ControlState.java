@@ -21,6 +21,7 @@ public class ControlState {
         else{
             statesMap.get(userId).putState(newState);
             statesMap.get(userId).clearUserRouteList();
+            statesMap.get(userId).updateLongLang(newState);
         }
     }
 

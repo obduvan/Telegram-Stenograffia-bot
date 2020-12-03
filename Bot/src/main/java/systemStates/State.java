@@ -33,6 +33,12 @@ public class State {
         }
     }
 
+    public void updateLongLang(float slatitude, float slongtitude){
+        latitude = slatitude;
+        longtitude = slongtitude;
+    }
+
+
     private void setFields(Message message){
         chatId = message.getChatId().toString();
         if (botState == BotState.WORKS_LOC_RAD){

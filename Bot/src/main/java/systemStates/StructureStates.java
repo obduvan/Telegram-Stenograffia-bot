@@ -19,6 +19,18 @@ public class StructureStates {
         return mainState;
     }
 
+    public void updateLongLang(State newState){
+        if (newState.getBotState() == BotState.GET_ROUTE_URL){
+            for (int i = stateList.size() - 1; i >= 0; i--) {
+                var state = stateList.get(i);
+                if (state.getBotState() == BotState.WORKS_LOC_RAD){
+                    newState.updateLongLang(state.getLatitude(), state.getLongtitude());
+                    break;
+                }
+            }
+        }
+    }
+
     public void putState(State newState){
         if (newState.getBotState() == BotState.NEXT_ART){
             for (int i = stateList.size() - 1; i >= 0; i--) {

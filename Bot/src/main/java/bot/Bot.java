@@ -151,7 +151,11 @@ public class Bot extends TelegramLongPollingBot {
                 }
                 else if (state.getBotState() == BotState.GET_ROUTE_URL) {
                     var routeList = controlState.getUserRouteList(Integer.parseInt(state.getChatId()));
-                    sendMessage = route.sendRouteMsg(state.getChatId(), routeList, state.getLatitudeLast(), state.getLongtitudeLast());
+                    var latitudeLast = state.getLatitudeLast();
+                    var longtitudeLast = state.getLongtitudeLast();
+                    var latitude = state.getLatitude();
+                    var longtitude = state.getLongtitude();
+                    sendMessage = route.sendRouteMsg(state.getChatId(), routeList, latitudeLast,longtitudeLast, latitude, longtitude);
                 }
                 else{
                     sendMessage = getSendMessage(state);
