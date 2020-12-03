@@ -99,7 +99,6 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleInputMessage(Message message, Integer userId) {
         System.out.println(message);
-//        BotState botStateLast = controlState.existUser(userId) ? controlState.getStateUser(userId).getBotState() : BotState.NONE;
         BotState botStateLast = getLastState(userId);
         boolean isGeoMsg = geoValidations.checkLocMsg(message);
 
@@ -155,7 +154,7 @@ public class Bot extends TelegramLongPollingBot {
                     var longtitudeLast = state.getLongtitudeLast();
                     var latitude = state.getLatitude();
                     var longtitude = state.getLongtitude();
-                    sendMessage = route.sendRouteMsg(state.getChatId(), routeList, latitudeLast,longtitudeLast, latitude, longtitude);
+                    sendMessage = route.sendRouteMsg(state.getChatId(), routeList, latitudeLast, longtitudeLast, latitude, longtitude);
                 }
                 else{
                     sendMessage = getSendMessage(state);

@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 public class WorkLocation extends PhotoWorks {
-    private Float currLocationLatitude;
-    private Float currLocationLongtitude;
-    private Float currRadius;
+    private double currLocationLatitude;
+    private double currLocationLongtitude;
+    private double currRadius;
     private SendMessage sendMessage;
     private GeoMath geoMath;
 
@@ -26,7 +26,7 @@ public class WorkLocation extends PhotoWorks {
         return sendMessage;
     }
 
-    public SendMessage sendRadMsg(float latitude, float longtitude, String chatId) {
+    public SendMessage sendRadMsg(double latitude, double longtitude, String chatId) {
         currLocationLatitude = latitude;
         currLocationLongtitude = longtitude;
         var sendMessage = setMessage(chatId);
@@ -34,13 +34,13 @@ public class WorkLocation extends PhotoWorks {
         return sendMessage;
     }
 
-    public SendPhoto sendMsg( Map<String, String> dataLine, State state) {
+    public SendPhoto sendMsg(Map<String, String> dataLine, State state) {
         String[] workCoordinates = dataLine.get(Constants.COORDINATES).split(" ");
 
         String forRoadCoordinates = String.format("%s %s",workCoordinates[0], workCoordinates[1]);
 
         String way = Constants.PathYandexMapLoc
-                + currLocationLatitude.toString() + Constants.YA_MAP_PATH_2C + currLocationLongtitude.toString() + "~"
+                + Double.toString(currLocationLatitude) + Constants.YA_MAP_PATH_2C + Double.toString(currLocationLongtitude) + "~"
                 + workCoordinates[0] + Constants.YA_MAP_PATH_2C + workCoordinates[1]
                 + Constants.YA_MAP_PATH_PART;
         return createPhotoBoardObj(dataLine, state, way, forRoadCoordinates);

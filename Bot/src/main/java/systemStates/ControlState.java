@@ -30,7 +30,7 @@ public class ControlState {
     }
 
 
-    public List<String> getUserRouteList(Integer userId){
+    public List<Double[]> getUserRouteList(Integer userId){
         return statesMap.get(userId).getRouteList();
     }
 

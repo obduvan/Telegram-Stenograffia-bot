@@ -9,10 +9,10 @@ public class State {
     private Integer totalPhotoWorks;
     private TypeMessage typeMessage;
     private String chatId;
-    private float latitude;
-    private float longtitude;
-    private float latitudeLast;
-    private float longtitudeLast;
+    private double latitude;
+    private double longtitude;
+    private double latitudeLast;
+    private double longtitudeLast;
 
 
     public State(BotState status, Message message){
@@ -33,7 +33,7 @@ public class State {
         }
     }
 
-    public void updateLongLang(float slatitude, float slongtitude){
+    public void updateLongLang(double slatitude, double slongtitude){
         latitude = slatitude;
         longtitude = slongtitude;
     }
@@ -57,12 +57,12 @@ public class State {
     public Integer getTotalPhotoWorks(){
         return totalPhotoWorks;
     }
-    public float getLatitudeLast(){return latitudeLast;}
-    public float getLongtitudeLast(){return longtitudeLast;}
+    public double getLatitudeLast(){return latitudeLast;}
+    public double getLongtitudeLast(){return longtitudeLast;}
 
-    public float getLatitude(){return  latitude; }
+    public double getLatitude(){return  latitude; }
 
-    public float getLongtitude(){return longtitude; }
+    public double getLongtitude(){return longtitude; }
 
     public String getChatId(){ return chatId; }
 
