@@ -6,7 +6,7 @@ import java.util.List;
 public class StructureStates {
     private State mainState;
     private List<State> stateList;
-    private List<Double[]> routeList;
+    private List<String> routeList;
 
     public StructureStates(State state){
         stateList  = new ArrayList<>(){};
@@ -54,18 +54,16 @@ public class StructureStates {
     }
 
     public void updateUserRouteList(String workCoordinates, boolean isAddWork){
-        var latitude = workCoordinates.split(" ")[0];
-        var longtitude = workCoordinates.split(" ")[1];
-        var coord = new Double[]{Double.parseDouble(latitude), Double.parseDouble(longtitude)};
+
         if (isAddWork)
-            routeList.add(coord);
+            routeList.add(workCoordinates);
         else
-            routeList.remove(coord);
+            routeList.remove(workCoordinates);
 //        System.out.println("---------------------------------------------");
 //        for (String el : routeList){System.out.println(el);}
     }
 
-    public List<Double[]> getRouteList(){
+    public List<String> getRouteList(){
         return routeList;
     }
 
