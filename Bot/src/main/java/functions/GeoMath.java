@@ -1,14 +1,11 @@
 package functions;
 
-import constants.Keys;
 import constants.Constants;
 import org.json.JSONObject;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
 
 public class GeoMath {
     public static Double getGeoPointsDistance(Double lat1, Double lat2, Double long1, Double long2) {
