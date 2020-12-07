@@ -1,10 +1,8 @@
 package functions;
 
+import constants.Keys;
 import constants.Constants;
-import okhttp3.ResponseBody;
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class GeoMath {
 
     public static ArrayList<double[]> getOptimalWay(ArrayList<double[]> coords) {
 
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=41.6655101,-73.89188969999998&key=";
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=41.6655101,-73.89188969999998&key=" + Keys.GOOGLE_API_KEY;
 
         final HttpClient httpClient = new HttpClient();
 
@@ -46,7 +44,7 @@ public class GeoMath {
         try {
             response = httpClient.post (url);
             final JSONObject obj = new JSONObject(response);
-            System.out.println (response);
+            System.out.println (obj);
         } catch (IOException e) {
             e.printStackTrace ( );
         }
