@@ -37,3 +37,4 @@ Parser/Parser.iml
 Parser/target/classes/jsonFiles/
 Parser/target/generated-sources/
 /Bot/.idea/
+Bot/src/main/java/constants/Keys.java
