@@ -6,12 +6,13 @@ import okhttp3.*;
 import java.io.IOException;
 
 public class HttpClient {
+
     public OkHttpClient client = new OkHttpClient();
 
     /*
         Передать нужно ссылку запроса
     */
-    public ResponseBody post(String url) throws IOException {
+    public String post(String url) throws IOException {
         /*
             Тело запроса
         */
@@ -24,7 +25,7 @@ public class HttpClient {
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            return response.body();
+            return response.body().string();
         }
     }
 }

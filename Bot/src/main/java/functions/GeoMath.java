@@ -1,9 +1,10 @@
 package functions;
 
-import com.google.gson.Gson;
 import constants.Constants;
 import okhttp3.ResponseBody;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -39,18 +40,13 @@ public class GeoMath {
 
         final HttpClient httpClient = new HttpClient();
 
-        Gson gson = new Gson();
-
         ArrayList<double[]> res = new ArrayList<>(coords);
 
-        final ResponseBody response;
-
+        final String response;
         try {
-            response = httpClient.post(url);
-////                    JSONObject jsonObject = new JSONObject(response);
-//            var objectToParse = gson.fromJson(response, Map.class);
-//            Object a = objectToParse.get("rows");
-            System.out.println (response.toString());
+            response = httpClient.post (url);
+            final JSONObject obj = new JSONObject(response);
+            System.out.println (response);
         } catch (IOException e) {
             e.printStackTrace ( );
         }
