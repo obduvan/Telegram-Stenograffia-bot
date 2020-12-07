@@ -1,5 +1,5 @@
 package constants;
 
 public class Keys {
-    public static final String GOOGLE_API_KEY = "";
+    public static final String GOOGLE_API_KEY = "AAA";
 }
