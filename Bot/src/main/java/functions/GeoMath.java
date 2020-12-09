@@ -9,9 +9,20 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class GeoMath {
-    public static Double getGeoPointsDistance(Double lat1, Double lat2, Double long1, Double long2) {
+
+    private  static GeoMath instance;
+
+    public static synchronized GeoMath getInstance(){
+        if (instance == null){
+            instance = new GeoMath();
+        }
+        return instance;
+    }
+
+    public Double getGeoPointsDistance(Double lat1, Double lat2, Double long1, Double long2) {
 
         if (lat1 > 90 || lat1 < -90 || lat2 > 90 || lat2 < -90 || long1 > 180 || long1 < -180 || long2 > 180 || long2 < -180) return -1.0;
 
@@ -32,13 +43,16 @@ public class GeoMath {
         return distance;
     }
 
-    public static String getOptimalWay(ArrayList<Double[]> intermediatePoints, double latitudeLast, double longtitudeLast, double latitude,  double longtitude) {
+    public String getOptimalWay(List<String> intermediatePointsList, double latitudeLast, double longtitudeLast, double latitude, double longtitude) {
 
-        var a = new Double[]{56.829033195152725, 60.59481518586104};
-        var b = new Double[]{56.82957622260527, 60.588090194751565};
-
-        intermediatePoints.add(b);
-        intermediatePoints.add(a);
+        ArrayList<Double[]> intermediatePoints = new ArrayList<Double[]>();
+        for (var latLong:intermediatePointsList) {
+            var coordsString = latLong.split(" ");
+            var currLatitude = Double.parseDouble(coordsString[0]);
+            var currLongtitude = Double.parseDouble(coordsString[1]);
+            var currCoords = new Double[]{currLatitude, currLongtitude};
+            intermediatePoints.add(currCoords);
+        }
 
         ArrayList<Double[]> coords = new ArrayList<Double[]>();
         Double[] startCoords = new Double[]{(double)latitude, (double)longtitude};
@@ -68,7 +82,7 @@ public class GeoMath {
                 try {
                     response = httpClient.post (url);
                     final JSONObject obj = new JSONObject(response);
-                    JSONArray abc = (JSONArray)obj.get("rows");
+//                    JSONArray abc = (JSONArray)obj.get("rows");
 //                    System.out.println(abc);
                     way = (Integer) ((JSONObject)((JSONObject)((JSONArray)((JSONObject)((JSONArray)obj.get("rows")).get(0)).get("elements")).get(0)).get("distance")).get("value");
                 } catch (IOException e) {
@@ -95,9 +109,5 @@ public class GeoMath {
         resPath = resPath.substring(0, resPath.length() - 1);
         resPath = resPath + Constants.YA_MAP_PATH_PART;
         return resPath;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(getOptimalWay(new ArrayList<Double[]>(), 56.829560433755184, 60.61502394563033, 56.828968612920335, 60.60232025086067));
     }
 }
