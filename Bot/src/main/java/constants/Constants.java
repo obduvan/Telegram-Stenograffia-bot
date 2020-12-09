@@ -31,4 +31,8 @@ public class Constants {
 
     public static final String YA_MAP_PATH_PART = "&rtt=mt&ruri=~&z=12";
     public static final String YA_MAP_PATH_2C = "%2C";
+
+    public static final String DISTANCE_MATRIX_URL_PATH = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&mode=walking&origins=";
+    public static final String DISTANCE_MATRIX_URL_DESTINATIONS = "&destinations=";
+    public static final String DISTANCE_MATRIX_URL_KEY = "&key=";
 }
