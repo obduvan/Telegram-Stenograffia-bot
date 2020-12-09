@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 
 public class Main {
-    public static void main(String[] args) throws SQLException, IOException {
+    public static void main(String[] args) throws SQLException {
         ApiContextInitializer.init();
         TelegramBotsApi telegram = new TelegramBotsApi();
         ConnectDataBase connectDataBase = new ConnectDataBase();

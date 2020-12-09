@@ -1,4 +1,6 @@
 package systemStates;
+import bot.Bot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,12 +9,16 @@ public class StructureStates {
     private State mainState;
     private List<State> stateList;
     private List<String> routeList;
+    private List<BotState> botStateList;
 
     public StructureStates(State state){
+
         stateList  = new ArrayList<>(){};
+        stateList.add(state);
         mainState = state;
         routeList = new ArrayList<>();
-        stateList.add(state);
+        botStateList = new ArrayList<>();
+        botStateList.add(state.getBotState());
     }
 
     public State getMainState(){
@@ -38,6 +44,7 @@ public class StructureStates {
                     case ASK_WORKS:
                     case WORKS_LOC_GET:
                         mainState = stateList.get(i);
+                        clearUserRouteList();
                         return;
                 }
             }
@@ -46,6 +53,7 @@ public class StructureStates {
             stateList.add(newState);
             mainState = newState;
         }
+        botStateList.add(mainState.getBotState());
     }
 
     public void clearUserRouteList(){
@@ -70,6 +78,8 @@ public class StructureStates {
     public List<State> getStateList(){
         return stateList;
     }
+
+    public List<BotState> getBotStateList(){return botStateList; }
 
     public boolean containsState(State newState){
         return stateList.contains(newState);

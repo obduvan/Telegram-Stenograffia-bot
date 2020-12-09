@@ -3,7 +3,7 @@ import org.junit.Before;
 import org.junit.Test;
 import systemStates.BotState;
 import systemStates.CreateBotStateMap;
-import systemStates.StatesValidator;
+import Validations.StatesValidator;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -31,6 +31,7 @@ public class TestStates {
     public void testGoodRequest() {
         String[] commands = new String[]{"/help", "/start", "/works", "/worksl", "/n", "/authors"};
         BotState[] states = new BotState[]{BotState.ASK_HELP, BotState.ASK_HELP, BotState.ASK_WORKS, BotState.WORKS_LOC_INIT, BotState.NEXT_ART, BotState.ASK_AUTHORS};
+
         int i = 0;
         for(String command : commands){
             var checkBotState = statesValidator.checkBotState(command, BotState.NONE, false, botStateMap);

@@ -74,10 +74,16 @@ public class StandardFunctions {
         sendMessage.setText(Constants.SENDLOC);
         return sendMessage;
     }
-
+    
     public SendMessage sendLocRouteMsg(String chatId){
         var sendMessage = setMessage(chatId);
         sendMessage.setText(Constants.GET_LAST_LOC);
+        return sendMessage;
+    }
+
+    public SendMessage sendNoArtInListMsg(String chatId){
+        var sendMessage = setMessage(chatId);
+        sendMessage.setText(Constants.NO_ART_IN_LIST);
         return sendMessage;
     }
 }

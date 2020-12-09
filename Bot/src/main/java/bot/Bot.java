@@ -1,5 +1,6 @@
 package bot;
 import Validations.GeoValidations;
+import Validations.StatesValidator;
 import constants.Constants;
 import functions.Route;
 import functions.WorkLocation;
@@ -33,7 +34,7 @@ public class Bot extends TelegramLongPollingBot {
     private InlineKeyboardWork changeInlineKeyboard;
     private Route route;
 
-    public Bot(List<Map<String, String>> idataList) throws IOException {
+    public Bot(List<Map<String, String>> idataList) {
         dataList = idataList;
         controlState = new ControlState();
         works = new Works();
@@ -103,6 +104,8 @@ public class Bot extends TelegramLongPollingBot {
         boolean isGeoMsg = geoValidations.checkLocMsg(message);
 
         var botState = statesValidator.checkBotState(message.getText(), botStateLast, isGeoMsg, botStateMap);
+
+        botState = statesValidator.validateGetRouteState(botState, userId, controlState) ;
         controlState.updateStatesMap(userId, botState, message);
     }
 
@@ -112,6 +115,7 @@ public class Bot extends TelegramLongPollingBot {
         actionMapText.put(BotState.ASK_AUTHORS, standardFunctions::sendAuthorsMsg);
         actionMapText.put(BotState.WORKS_LOC_INIT, standardFunctions::sendLocMsg);
         actionMapText.put(BotState.GET_ROUTE, standardFunctions::sendLocRouteMsg);
+        actionMapText.put(BotState.MSG_NO_ART_IN_LIST, standardFunctions::sendNoArtInListMsg);
     }
 
     private void createMapWorkMessage() {
@@ -149,7 +153,7 @@ public class Bot extends TelegramLongPollingBot {
                     sendMessage = workLocation.sendRadMsg(state.getLatitude(), state.getLongtitude(), state.getChatId());
                 }
                 else if (state.getBotState() == BotState.GET_ROUTE_URL) {
-                    var routeList = controlState.getUserRouteList(Integer.parseInt(state.getChatId()));
+                    var routeList = controlState.getUserRouteList(userId);
                     var latitudeLast = state.getLatitudeLast();
                     var longtitudeLast = state.getLongtitudeLast();
                     var latitude = state.getLatitude();

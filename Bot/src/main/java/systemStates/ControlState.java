@@ -20,7 +20,7 @@ public class ControlState {
         }
         else{
             statesMap.get(userId).putState(newState);
-            statesMap.get(userId).clearUserRouteList();
+//            statesMap.get(userId).clearUserRouteList();
             statesMap.get(userId).updateLongLang(newState);
         }
     }
@@ -44,5 +44,9 @@ public class ControlState {
 
     public StructureStates getStructureUser(Integer userId){
         return statesMap.get(userId);
+    }
+
+    public List<BotState> getBotStateListUser(Integer userId){
+        return statesMap.get(userId).getBotStateList();
     }
 }

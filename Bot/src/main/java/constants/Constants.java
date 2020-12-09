@@ -6,9 +6,11 @@ public class Constants {
     public static final String START = "/start";
     public static final String AUTHORS = "/authors";
     public static final String WORKS = "/works";
+    public static final String WORKSLOC = "/worksl";
     public static final String NEXTART = "/n";
     public static final String GET_ROUTE = "/route";
     public static final String GET_LAST_LOC = "Отправьте геопозицию, где бы вы хотели закончить маршрут";
+    public static final String NO_ART_IN_LIST = "Список выбранных работ пуст. Добавьте его с помощью команды:  /worksl";
 
     public static final String PathYandexMapLoc = "https://yandex.ru/maps/54/yekaterinburg/?ll=60.6125%2C56.8575&mode=routes&rtext=";
     public static final String TITLE = "TITLE";

@@ -11,4 +11,5 @@ public enum BotState {
     GET_ROUTE,
     GET_ROUTE_URL,
     NONE,
+    MSG_NO_ART_IN_LIST,
 }
