@@ -4,6 +4,7 @@ import constants.Keys;
 import constants.Constants;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class GeoMath {
         return distance;
     }
 
-    public String getOptimalWay(List<String> intermediatePointsList, double latitudeLast, double longtitudeLast, double latitude, double longtitude) {
+    public SendMessage getOptimalWay(String chatId, List<String> intermediatePointsList, double latitudeLast, double longtitudeLast, double latitude, double longtitude) {
 
         ArrayList<Double[]> intermediatePoints = new ArrayList<Double[]>();
         for (var latLong:intermediatePointsList) {
@@ -54,8 +55,8 @@ public class GeoMath {
         }
 
         ArrayList<Double[]> coords = new ArrayList<Double[]>();
-        Double[] startCoords = new Double[]{(double)latitude, (double)longtitude};
-        Double[] finishCoords = new Double[]{(double)latitudeLast, (double)longtitudeLast};
+        Double[] startCoords = new Double[]{latitude, longtitude};
+        Double[] finishCoords = new Double[]{latitudeLast, longtitudeLast};
         coords.add(startCoords);
         coords.addAll(intermediatePoints);
 
@@ -107,6 +108,11 @@ public class GeoMath {
         }
         resPath = resPath.substring(0, resPath.length() - 1);
         resPath = resPath + Constants.YA_MAP_PATH_PART;
-        return resPath;
+
+        var resMsg = new SendMessage();
+        resMsg.setChatId(chatId);
+        resMsg.setText(resPath);
+
+        return resMsg;
     }
 }
