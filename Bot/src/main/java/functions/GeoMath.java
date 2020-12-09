@@ -32,21 +32,19 @@ public class GeoMath {
         return distance;
     }
 
-    public static ArrayList<Double[]> getOptimalWay(ArrayList<Double[]> a) {
+    public static String getOptimalWay(ArrayList<Double[]> intermediatePoints, double latitudeLast, double longtitudeLast, double latitude,  double longtitude) {
+
+        var a = new Double[]{56.829033195152725, 60.59481518586104};
+        var b = new Double[]{56.82957622260527, 60.588090194751565};
+
+        intermediatePoints.add(b);
+        intermediatePoints.add(a);
 
         ArrayList<Double[]> coords = new ArrayList<Double[]>();
-        Double[] m = new Double[]{56.82969129413337, 60.62512613127236};
-        Double[] x = new Double[]{56.82925978317406, 60.62307280380156};
-        Double[] y = new Double[]{56.82775752677078, 60.61883864119887};
-        Double[] z = new Double[]{56.822429366931985, 60.55912993340787};
-        Double[] n = new Double[]{56.81689455893772, 60.54017628175199};
-        coords.add(m);
-        coords.add(n);
-        coords.add(z);
-        coords.add(x);
-        coords.add(y);
-
-//        String url = "47.6655101,-75.89188969999998&destinations=41.6655101,-73.89188969999998&key=" + Keys.GOOGLE_API_KEY;
+        Double[] startCoords = new Double[]{(double)latitude, (double)longtitude};
+        Double[] finishCoords = new Double[]{(double)latitudeLast, (double)longtitudeLast};
+        coords.add(startCoords);
+        coords.addAll(intermediatePoints);
 
         final HttpClient httpClient = new HttpClient();
 
@@ -71,7 +69,7 @@ public class GeoMath {
                     response = httpClient.post (url);
                     final JSONObject obj = new JSONObject(response);
                     JSONArray abc = (JSONArray)obj.get("rows");
-                    System.out.println(abc);
+//                    System.out.println(abc);
                     way = (Integer) ((JSONObject)((JSONObject)((JSONArray)((JSONObject)((JSONArray)obj.get("rows")).get(0)).get("elements")).get(0)).get("distance")).get("value");
                 } catch (IOException e) {
                     e.printStackTrace ( );
@@ -84,13 +82,22 @@ public class GeoMath {
             }
             Collections.swap(res, i + 1, indexWithMinWay);
         }
+
+        res.add(finishCoords);
+
+        String resPath = Constants.PathYandexMapLoc;
+
         for (var value:res) {
-            System.out.println(Arrays.toString(value));
+            var currLatitude = value[0];
+            var currLongtitude = value[1];
+            resPath = resPath + currLatitude.toString() + Constants.YA_MAP_PATH_2C + currLongtitude.toString() + "~";
         }
-        return res;
+        resPath = resPath.substring(0, resPath.length() - 1);
+        resPath = resPath + Constants.YA_MAP_PATH_PART;
+        return resPath;
     }
 
     public static void main(String[] args) {
-        getOptimalWay(new ArrayList<Double[]>());
+        System.out.println(getOptimalWay(new ArrayList<Double[]>(), 56.829560433755184, 60.61502394563033, 56.828968612920335, 60.60232025086067));
     }
 }
