@@ -50,8 +50,6 @@ public class Route {
                 try {
                     response = httpClient.post (url);
                     final JSONObject obj = new JSONObject(response);
-//                    JSONArray abc = (JSONArray)obj.get("rows");
-//                    System.out.println(abc);
                     way = (Integer) ((JSONObject)((JSONObject)((JSONArray)((JSONObject)((JSONArray)obj.get("rows")).get(0)).get("elements")).get(0)).get("distance")).get("value");
                 } catch (IOException e) {
                     e.printStackTrace ( );
@@ -83,7 +81,4 @@ public class Route {
 
         return resMsg;
     }
-
-
-
 }
