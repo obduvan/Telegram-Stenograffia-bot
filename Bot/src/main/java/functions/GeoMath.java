@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class GeoMath {
-
     private  static GeoMath instance;
 
     public static synchronized GeoMath getInstance(){
