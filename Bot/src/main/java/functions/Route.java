@@ -1,10 +1,13 @@
 package functions;
 
+import com.google.common.base.MoreObjects;
 import constants.Constants;
 import constants.Keys;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.sqlite.core.DB;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import realizations.CreatorSendMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,17 +15,16 @@ import java.util.Collections;
 import java.util.List;
 
 public class Route {
-    public SendMessage sendRouteMsg(String chatId, List<String> routeList, double latitudeLast, double longtitudeLast, double latitude,  double longtitude){
-        ArrayList<Double[]> intermediatePoints = new ArrayList<Double[]>();
-        for (var latLong:routeList) {
-            var coordsString = latLong.split(" ");
-            var currLatitude = Double.parseDouble(coordsString[0]);
-            var currLongtitude = Double.parseDouble(coordsString[1]);
-            var currCoords = new Double[]{currLatitude, currLongtitude};
-            intermediatePoints.add(currCoords);
-        }
+    private CreatorSendMessage creatorSendMessage;
+    public Route(){
+        creatorSendMessage = new CreatorSendMessage();
+    }
 
-        ArrayList<Double[]> coords = new ArrayList<Double[]>();
+
+    public SendMessage sendRouteMsg(String chatId, List<String> routeList, double latitudeLast, double longtitudeLast, double latitude,  double longtitude){
+        ArrayList<Double[]> intermediatePoints = convertingInputList(routeList);
+
+        ArrayList<Double[]> coords = new ArrayList<>();
         Double[] startCoords = new Double[]{latitude, longtitude};
         Double[] finishCoords = new Double[]{latitudeLast, longtitudeLast};
         coords.add(startCoords);
@@ -65,8 +67,14 @@ public class Route {
 
         res.add(finishCoords);
 
-        String resPath = Constants.PathYandexMapLoc;
+        String  routeLink = creatorRouteLink(res);
+        SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
+        sendMessage.setText(routeLink);
 
+        return sendMessage;
+    }
+    private String creatorRouteLink(  ArrayList<Double[]> res){
+        String resPath = Constants.PathYandexMapLoc;
         for (var value:res) {
             var currLatitude = value[0];
             var currLongtitude = value[1];
@@ -74,11 +82,20 @@ public class Route {
         }
         resPath = resPath.substring(0, resPath.length() - 1);
         resPath = resPath + Constants.YA_MAP_PATH_PART;
+        return resPath;
+    }
 
-        var resMsg = new SendMessage();
-        resMsg.setChatId(chatId);
-        resMsg.setText(resPath);
 
-        return resMsg;
+    private ArrayList<Double[]> convertingInputList(List<String> routeList){
+        ArrayList<Double[]> intermediatePoints = new ArrayList<>();
+        for (var latLong:routeList) {
+            var coordsString = latLong.split(" ");
+            var currLatitude = Double.parseDouble(coordsString[0]);
+            var currLongtitude = Double.parseDouble(coordsString[1]);
+            var currCoords = new Double[]{currLatitude, currLongtitude};
+
+            intermediatePoints.add(currCoords);
+        }
+        return intermediatePoints;
     }
 }
