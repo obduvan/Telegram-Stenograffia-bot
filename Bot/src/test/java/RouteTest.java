@@ -53,5 +53,19 @@ public class RouteTest {
         Assert.assertEquals(actual, expected);
     }
 
+    @Test
+    public void testLinkWithEqualValues() {
+        String chatId = "test";
+        List<String> intermediatePoints = new ArrayList<String>();
+        SendMessage actual = route.sendRouteMsg(chatId, intermediatePoints, 56.84046533579498, 60.653743815289964, 56.84046533579498, 60.653743815289964);
+        SendMessage expected = new SendMessage();
+
+        String expectedUrl = Constants.PathYandexMapLoc + "56.84046533579498" + Constants.YA_MAP_PATH_2C + "60.653743815289964" + "~" +
+                "56.84046533579498" + Constants.YA_MAP_PATH_2C + "60.653743815289964" + Constants.YA_MAP_PATH_PART;
+
+        expected.setChatId(chatId);
+        expected.setText(expectedUrl);
+        Assert.assertEquals(actual, expected);
+    }
 
 }
