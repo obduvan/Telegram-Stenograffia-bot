@@ -12,20 +12,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
-public class StandardFunctions {
-    private CreatorSendMessage creatorSendMessage;
-
-    public StandardFunctions(){
-        creatorSendMessage = new CreatorSendMessage();
-    }
-
+public class StandardFunctions extends CreatorSendMessage {
 
     private String getDefaultMessage() throws IOException {
         return new String(Files.readAllBytes(Paths.get(ConstantPath.defaultMessage)));
     }
 
     public SendMessage sendHelpMsg(String chatId)  {
-        SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
+        SendMessage sendMessage = setMessage(chatId);
         try {
             sendMessage.setText(getDefaultMessage());
         } catch (IOException e) {
@@ -45,45 +39,45 @@ public class StandardFunctions {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
+        SendMessage sendMessage = setMessage(chatId);
         sendMessage.setText(text);
         return sendMessage;
     }
 
     public SendMessage sendNoneMsg(String chatId){
         var text = Constants.NONE_MSG;
-        SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
+        SendMessage sendMessage = setMessage(chatId);
         sendMessage.setText(text);
         return sendMessage;
     }
 
     public SendMessage sendEndedWorks(String chatId){
         var text = Constants.ENDEDWORKSMSG;
-        SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
+        SendMessage sendMessage = setMessage(chatId);
         sendMessage.setText(text);
         return sendMessage;
     }
 
     public SendMessage sendNoWorksMsg(String chatId) {
-        var sendMessage = creatorSendMessage.setMessage(chatId);
+        var sendMessage = setMessage(chatId);
         sendMessage.setText(Constants.NOARTINLOC);
         return sendMessage;
     }
 
     public SendMessage sendLocMsg(String chatId) {
-        var sendMessage = creatorSendMessage.setMessage(chatId);
+        var sendMessage = setMessage(chatId);
         sendMessage.setText(Constants.SENDLOC);
         return sendMessage;
     }
     
     public SendMessage sendLocRouteMsg(String chatId){
-        var sendMessage = creatorSendMessage.setMessage(chatId);
+        var sendMessage = setMessage(chatId);
         sendMessage.setText(Constants.GET_LAST_LOC);
         return sendMessage;
     }
 
     public SendMessage sendNoArtInListMsg(String chatId){
-        var sendMessage = creatorSendMessage.setMessage(chatId);
+        var sendMessage = setMessage(chatId);
         sendMessage.setText(Constants.NO_ART_IN_LIST);
         return sendMessage;
     }

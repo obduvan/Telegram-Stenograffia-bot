@@ -67,13 +67,14 @@ public class Route {
 
         res.add(finishCoords);
 
-        String  routeLink = creatorRouteLink(res);
+        String routeLink = creatorRouteLink(res);
         SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
         sendMessage.setText(routeLink);
 
         return sendMessage;
     }
-    private String creatorRouteLink(  ArrayList<Double[]> res){
+
+    private String creatorRouteLink(ArrayList<Double[]> res){
         String resPath = Constants.PathYandexMapLoc;
         for (var value:res) {
             var currLatitude = value[0];
@@ -84,7 +85,6 @@ public class Route {
         resPath = resPath + Constants.YA_MAP_PATH_PART;
         return resPath;
     }
-
 
     private ArrayList<Double[]> convertingInputList(List<String> routeList){
         ArrayList<Double[]> intermediatePoints = new ArrayList<>();
