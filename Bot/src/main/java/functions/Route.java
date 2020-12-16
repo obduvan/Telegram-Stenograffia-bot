@@ -1,11 +1,8 @@
 package functions;
 
-import com.google.common.base.MoreObjects;
 import constants.Constants;
-import constants.Keys;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.sqlite.core.DB;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import realizations.CreatorSendMessage;
 
@@ -46,7 +43,7 @@ public class Route {
                 var way = 0.0;
                 String url = Constants.DISTANCE_MATRIX_URL_PATH + lat1 + "," + long1 +
                         Constants.DISTANCE_MATRIX_URL_DESTINATIONS + lat2 + "," + long2 +
-                        Constants.DISTANCE_MATRIX_URL_KEY + Keys.GOOGLE_API_KEY;
+                        Constants.DISTANCE_MATRIX_URL_KEY + System.getenv(Constants.SYS_API_KEY);
 
                 final String response;
                 try {
