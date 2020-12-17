@@ -29,7 +29,15 @@ public class Route {
 
         final HttpClient httpClient = new HttpClient();
 
-        ArrayList<Double[]> res = (ArrayList<Double[]>)coords.clone();
+        String routeLink = getRouteLink(coords, finishCoords, httpClient);
+        SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
+        sendMessage.setText(routeLink);
+
+        return sendMessage;
+    }
+
+    public String getRouteLink(ArrayList<Double[]> coords, Double[] finishCoords, HttpClient httpClient) {
+        ArrayList<Double[]> res = (ArrayList<Double[]>) coords.clone();
 
         for (var i = 0; i < res.size() - 1; i++) {
             double minWay = Double.MAX_VALUE;
@@ -64,11 +72,7 @@ public class Route {
 
         res.add(finishCoords);
 
-        String routeLink = creatorRouteLink(res);
-        SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
-        sendMessage.setText(routeLink);
-
-        return sendMessage;
+        return creatorRouteLink(res);
     }
 
     private String creatorRouteLink(ArrayList<Double[]> res){
@@ -83,7 +87,7 @@ public class Route {
         return resPath;
     }
 
-    private ArrayList<Double[]> convertingInputList(List<String> routeList){
+    public ArrayList<Double[]> convertingInputList(List<String> routeList){
         ArrayList<Double[]> intermediatePoints = new ArrayList<>();
         for (var latLong:routeList) {
             var coordsString = latLong.split(" ");
