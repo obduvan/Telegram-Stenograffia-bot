@@ -19,8 +19,7 @@ public class Route {
 
 
     public SendMessage sendRouteMsg(String chatId, List<Double[]> routeList, double latitudeLast, double longtitudeLast, double latitude,  double longtitude){
-//        ArrayList<Double[]> intermediatePoints = convertingInputList(routeList);
-//         intermediatePoints = routeList;
+
         ArrayList<Double[]> coords = new ArrayList<>();
         Double[] startCoords = new Double[]{latitude, longtitude};
         Double[] finishCoords = new Double[]{latitudeLast, longtitudeLast};
@@ -29,7 +28,15 @@ public class Route {
 
         final HttpClient httpClient = new HttpClient();
 
-        ArrayList<Double[]> res = (ArrayList<Double[]>)coords.clone();
+        String routeLink = getRouteLink(coords, finishCoords, httpClient);
+        SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
+        sendMessage.setText(routeLink);
+
+        return sendMessage;
+    }
+
+    public String getRouteLink(ArrayList<Double[]> coords, Double[] finishCoords, HttpClient httpClient) {
+        ArrayList<Double[]> res = (ArrayList<Double[]>) coords.clone();
 
         for (var i = 0; i < res.size() - 1; i++) {
             double minWay = Double.MAX_VALUE;
@@ -64,11 +71,7 @@ public class Route {
 
         res.add(finishCoords);
 
-        String routeLink = creatorRouteLink(res);
-        SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
-        sendMessage.setText(routeLink);
-
-        return sendMessage;
+        return creatorRouteLink(res);
     }
 
     private String creatorRouteLink(ArrayList<Double[]> res){
@@ -83,16 +86,16 @@ public class Route {
         return resPath;
     }
 
-    private ArrayList<Double[]> convertingInputList(List<String> routeList){
-        ArrayList<Double[]> intermediatePoints = new ArrayList<>();
-        for (var latLong:routeList) {
-            var coordsString = latLong.split(" ");
-            var currLatitude = Double.parseDouble(coordsString[0]);
-            var currLongtitude = Double.parseDouble(coordsString[1]);
-            var currCoords = new Double[]{currLatitude, currLongtitude};
-
-            intermediatePoints.add(currCoords);
-        }
-        return intermediatePoints;
-    }
+//    public ArrayList<Double[]> convertingInputList(List<String> routeList){
+//        ArrayList<Double[]> intermediatePoints = new ArrayList<>();
+//        for (var latLong:routeList) {
+//            var coordsString = latLong.split(" ");
+//            var currLatitude = Double.parseDouble(coordsString[0]);
+//            var currLongtitude = Double.parseDouble(coordsString[1]);
+//            var currCoords = new Double[]{currLatitude, currLongtitude};
+//
+//            intermediatePoints.add(currCoords);
+//        }
+//        return intermediatePoints;
+//    }
 }
