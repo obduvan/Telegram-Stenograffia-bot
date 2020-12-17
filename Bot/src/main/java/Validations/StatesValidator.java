@@ -38,7 +38,7 @@ public class StatesValidator {
 
     public BotState validateGetRouteState(BotState currentBotState, Integer userId, ControlState controlState){
 
-        List<String> routeList;
+        List<Double[]> routeList;
         if (controlState.existUser(userId))
             routeList = controlState.getUserRouteList(userId);
         else routeList = new ArrayList<>();

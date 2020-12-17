@@ -1,5 +1,6 @@
 package systemStates;
 import bot.Bot;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,8 @@ public class StructureStates {
     private State mainState;
     private List<State> stateList;
     private List<String> routeList;
+    private ArrayList<Double[]> routeListDouble;
+
     private List<BotState> botStateList;
 
     public StructureStates(State state){
@@ -17,6 +20,7 @@ public class StructureStates {
         stateList.add(state);
         mainState = state;
         routeList = new ArrayList<>();
+        routeListDouble = new ArrayList<>();
         botStateList = new ArrayList<>();
         botStateList.add(state.getBotState());
     }
@@ -57,22 +61,35 @@ public class StructureStates {
     }
 
     public void clearUserRouteList(){
-        if (mainState.getBotState() == BotState.ASK_WORKS || mainState.getBotState() == BotState.WORKS_LOC_INIT)
+        if (mainState.getBotState() == BotState.ASK_WORKS || mainState.getBotState() == BotState.WORKS_LOC_INIT){
             routeList.clear();
+            routeListDouble.clear();
+        }
+
     }
 
     public void updateUserRouteList(String workCoordinates, boolean isAddWork){
+        var coordsString = workCoordinates.split(" ");
+        var currLatitude = Double.parseDouble(coordsString[0]);
+        var currLongtitude = Double.parseDouble(coordsString[1]);
+        var currCoords = new Double[]{currLatitude, currLongtitude};
 
-        if (isAddWork)
+        if (isAddWork){
             routeList.add(workCoordinates);
-        else
-            routeList.remove(workCoordinates);
+            routeListDouble.add(currCoords);
+        }
+
+        else{
+            var remove_index = routeList.indexOf(workCoordinates);
+            routeList.remove(remove_index);
+            routeListDouble.remove(remove_index);
+        }
 //        System.out.println("---------------------------------------------");
 //        for (String el : routeList){System.out.println(el);}
     }
 
-    public List<String> getRouteList(){
-        return routeList;
+    public List<Double[]> getRouteList(){
+        return routeListDouble;
     }
 
     public List<State> getStateList(){

@@ -4,7 +4,6 @@ import org.junit.Test;
 import systemStates.BotState;
 import systemStates.CreateBotStateMap;
 import Validations.StatesValidator;
-import java.io.IOException;
 import java.util.HashMap;
 
 
@@ -13,7 +12,7 @@ public class TestStates {
     private StatesValidator statesValidator;
 
     @Before
-    public void setup() throws IOException {
+    public void setup(){
         botStateMap = new CreateBotStateMap().getBotStateMap();
         statesValidator = new StatesValidator();
     }

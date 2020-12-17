@@ -6,10 +6,8 @@ import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import realizations.CreatorSendMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class Route {
     private CreatorSendMessage creatorSendMessage;
@@ -18,14 +16,13 @@ public class Route {
     }
 
 
-    public SendMessage sendRouteMsg(String chatId, List<String> routeList, double latitudeLast, double longtitudeLast, double latitude,  double longtitude){
-        ArrayList<Double[]> intermediatePoints = convertingInputList(routeList);
+    public SendMessage sendRouteMsg(String chatId, ArrayList<Double[]> routeList, double latitudeLast, double longtitudeLast, double latitude,  double longtitude){
 
         ArrayList<Double[]> coords = new ArrayList<>();
         Double[] startCoords = new Double[]{latitude, longtitude};
         Double[] finishCoords = new Double[]{latitudeLast, longtitudeLast};
         coords.add(startCoords);
-        coords.addAll(intermediatePoints);
+        coords.addAll(routeList);
 
         final HttpClient httpClient = new HttpClient();
 
@@ -58,8 +55,8 @@ public class Route {
                     response = httpClient.post (url);
                     final JSONObject obj = new JSONObject(response);
                     way = (Integer) ((JSONObject)((JSONObject)((JSONArray)((JSONObject)((JSONArray)obj.get("rows")).get(0)).get("elements")).get(0)).get("distance")).get("value");
-                } catch (IOException e) {
-                    e.printStackTrace ( );
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
 
                 if (way < minWay) {
@@ -85,18 +82,5 @@ public class Route {
         resPath = resPath.substring(0, resPath.length() - 1);
         resPath = resPath + Constants.YA_MAP_PATH_PART;
         return resPath;
-    }
-
-    public ArrayList<Double[]> convertingInputList(List<String> routeList){
-        ArrayList<Double[]> intermediatePoints = new ArrayList<>();
-        for (var latLong:routeList) {
-            var coordsString = latLong.split(" ");
-            var currLatitude = Double.parseDouble(coordsString[0]);
-            var currLongtitude = Double.parseDouble(coordsString[1]);
-            var currCoords = new Double[]{currLatitude, currLongtitude};
-
-            intermediatePoints.add(currCoords);
-        }
-        return intermediatePoints;
     }
 }
