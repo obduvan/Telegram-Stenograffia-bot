@@ -22,9 +22,9 @@ public class RouteTest {
     @Test
     public void testLink() {
         String chatId = "test";
-        List<String> intermediatePoints = new ArrayList<String>();
-        intermediatePoints.add("56.803640796185675 60.556411815291796"); // потом эта
-        intermediatePoints.add("56.84375148104052 60.573062968730625"); // сначала эта
+        var intermediatePoints = new ArrayList<Double[]>();
+        intermediatePoints.add(new Double[]{56.803640796185675, 60.556411815291796}); // потом эта
+        intermediatePoints.add(new Double[]{56.84375148104052, 60.573062968730625}); // сначала эта
         SendMessage actual = route.sendRouteMsg(chatId, intermediatePoints, 56.83201392329678, 60.583362651270114, 56.84046533579498, 60.653743815289964);
         SendMessage expected = new SendMessage();
 
@@ -41,7 +41,7 @@ public class RouteTest {
     @Test
     public void testLinkWithoutIntermediateValues() {
         String chatId = "test";
-        List<String> intermediatePoints = new ArrayList<String>();
+        var intermediatePoints = new ArrayList<Double[]>();
         SendMessage actual = route.sendRouteMsg(chatId, intermediatePoints, 56.83201392329678, 60.583362651270114, 56.84046533579498, 60.653743815289964);
         SendMessage expected = new SendMessage();
 
@@ -56,7 +56,7 @@ public class RouteTest {
     @Test
     public void testLinkWithEqualValues() {
         String chatId = "test";
-        List<String> intermediatePoints = new ArrayList<String>();
+        var intermediatePoints = new ArrayList<Double[]>();
         SendMessage actual = route.sendRouteMsg(chatId, intermediatePoints, 56.84046533579498, 60.653743815289964, 56.84046533579498, 60.653743815289964);
         SendMessage expected = new SendMessage();
 

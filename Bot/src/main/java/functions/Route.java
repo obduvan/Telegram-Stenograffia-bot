@@ -18,14 +18,14 @@ public class Route {
     }
 
 
-    public SendMessage sendRouteMsg(String chatId, List<String> routeList, double latitudeLast, double longtitudeLast, double latitude,  double longtitude){
-        ArrayList<Double[]> intermediatePoints = convertingInputList(routeList);
-
+    public SendMessage sendRouteMsg(String chatId, List<Double[]> routeList, double latitudeLast, double longtitudeLast, double latitude,  double longtitude){
+//        ArrayList<Double[]> intermediatePoints = convertingInputList(routeList);
+//         intermediatePoints = routeList;
         ArrayList<Double[]> coords = new ArrayList<>();
         Double[] startCoords = new Double[]{latitude, longtitude};
         Double[] finishCoords = new Double[]{latitudeLast, longtitudeLast};
         coords.add(startCoords);
-        coords.addAll(intermediatePoints);
+        coords.addAll(routeList);
 
         final HttpClient httpClient = new HttpClient();
 
