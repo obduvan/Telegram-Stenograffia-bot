@@ -1,3 +1,4 @@
+
 import functions.HttpClient;
 import functions.Route;
 import org.junit.Assert;
@@ -30,6 +31,8 @@ public class RouteTest {
 
         String actualUrl = route.getRouteLink(intermediatePoints, finishCoords, httpClient);
 
+
+
         String expectedUrl = Constants.PathYandexMapLoc + "56.84046533579498" + Constants.YA_MAP_PATH_2C + "60.653743815289964" + "~" +
                 "56.84375148104052" + Constants.YA_MAP_PATH_2C + "60.573062968730625" + "~" +
                 "56.803640796185675" + Constants.YA_MAP_PATH_2C + "60.556411815291796" + "~" +
@@ -47,6 +50,7 @@ public class RouteTest {
 
         String actualUrl = route.getRouteLink(intermediatePoints, finishCoords, httpClient);
 
+
         String expectedUrl = Constants.PathYandexMapLoc + "56.84046533579498" + Constants.YA_MAP_PATH_2C + "60.653743815289964" + "~" +
                 "56.83201392329678" + Constants.YA_MAP_PATH_2C + "60.583362651270114" + Constants.YA_MAP_PATH_PART;
 
@@ -55,6 +59,7 @@ public class RouteTest {
 
     @Test
     public void testLinkWithEqualValues() {
+
         var intermediatePoints = new ArrayList<Double[]>();
         intermediatePoints.add((new Double[]{56.84046533579498, 60.653743815289964}));
         Double[] finishCoords = new Double[]{56.84046533579498, 60.653743815289964};
