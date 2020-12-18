@@ -15,7 +15,6 @@ public class Route {
         creatorSendMessage = new CreatorSendMessage();
     }
 
-
     public SendMessage sendRouteMsg(String chatId, ArrayList<Double[]> routeList, double latitudeLast, double longtitudeLast, double latitude,  double longtitude){
 
         ArrayList<Double[]> coords = new ArrayList<>();

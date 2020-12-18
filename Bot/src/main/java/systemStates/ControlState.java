@@ -20,13 +20,12 @@ public class ControlState {
         }
         else{
             statesMap.get(userId).putState(newState);
-//            statesMap.get(userId).clearUserRouteList();
             statesMap.get(userId).updateLongLang(newState);
         }
     }
 
     public void updateUserRouteList(Integer userId, String workCoordinates, boolean isAddWork){
-        statesMap.get(userId).updateUserRouteList(workCoordinates, isAddWork);             // а если ключ не найдется?
+        statesMap.get(userId).updateUserRouteList(workCoordinates, isAddWork);
     }
 
 

@@ -42,9 +42,7 @@ public class StatesValidator {
         if (controlState.existUser(userId))
             routeList = controlState.getUserRouteList(userId);
         else routeList = new ArrayList<>();
-        System.out.println(currentBotState+ "   "+routeList);
         if (currentBotState == BotState.GET_ROUTE){
-
             if (routeList.size() == 0) currentBotState = BotState.MSG_NO_ART_IN_LIST;
 
         }

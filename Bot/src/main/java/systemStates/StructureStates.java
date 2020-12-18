@@ -1,6 +1,5 @@
 package systemStates;
-import bot.Bot;
-import org.checkerframework.checker.units.qual.A;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,8 +83,6 @@ public class StructureStates {
             routeList.remove(remove_index);
             routeListDouble.remove(remove_index);
         }
-//        System.out.println("---------------------------------------------");
-//        for (String el : routeList){System.out.println(el);}
     }
 
     public List<Double[]> getRouteList(){
