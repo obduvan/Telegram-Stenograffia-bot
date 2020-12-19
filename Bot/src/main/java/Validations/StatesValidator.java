@@ -20,7 +20,7 @@ public class StatesValidator {
             } else if (isFloat(textMessage) && (botStateLast.equals(BotState.WORKS_LOC_RAD) || botStateLast.equals(BotState.WORKS_LOC_GET))) {
                 botState = BotState.WORKS_LOC_GET;
             } else {
-                botState = (botStateLast.equals(BotState.WORKS_LOC_RAD) || botStateLast.equals(BotState.WORKS_LOC_GET)) ? BotState.WORKS_LOC_RAD : BotState.NONE;
+                botState = BotState.NONE;
             }
         }
         else {
