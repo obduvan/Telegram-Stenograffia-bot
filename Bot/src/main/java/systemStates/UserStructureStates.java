@@ -2,24 +2,21 @@ package systemStates;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class UserStructureStates {
     private State mainState;
     private List<State> stateList;
-    private List<String> routeList;
-    private ArrayList<Double[]> routeListDouble;
-
+    private Map<String, Double[]> routeMap;
     private List<BotState> botStateList;
 
     public UserStructureStates() {
-        stateList = new ArrayList<>() {};
-        routeList = new ArrayList<>();
+        stateList = new ArrayList<>(){};
         botStateList = new ArrayList<>();
-
-        routeListDouble = new ArrayList<>();
-
+        routeMap = new HashMap<>();
     }
 
     public State getMainState() {
@@ -49,26 +46,27 @@ public class UserStructureStates {
             for (int i = stateList.size() - 1; i >= 0; i--) {
                 switch (stateList.get(i).getBotState()) {
                     case ASK_WORKS:
-                    case WORKS_LOC_GET:
+                    case WORKS_LOC_GET:{
                         mainState = stateList.get(i);
-                        clearUserRouteList();
                         return;
+                    }
+
                 }
             }
-        } else {
+        }
+        else {
             stateList.add(newState);
             mainState = newState;
         }
 
+        clearUserRouteList();
         botStateList.add(mainState.getBotState());
     }
 
     public void clearUserRouteList() {
         if (mainState.getBotState() == BotState.ASK_WORKS || mainState.getBotState() == BotState.WORKS_LOC_INIT) {
-            routeList.clear();
-            routeListDouble.clear();
+            routeMap.clear();
         }
-
     }
 
     public void updateUserRouteList(String workCoordinates, boolean isAddWork) {
@@ -78,17 +76,15 @@ public class UserStructureStates {
         var currCoords = new Double[]{currLatitude, currLongtitude};
 
         if (isAddWork) {
-            routeList.add(workCoordinates);
-            routeListDouble.add(currCoords);
-        } else {
-            var remove_index = routeList.indexOf(workCoordinates);
-            routeList.remove(remove_index);
-            routeListDouble.remove(remove_index);
+            routeMap.put(workCoordinates, currCoords);
         }
+        else routeMap.remove(workCoordinates);
+
     }
 
     public List<Double[]> getRouteList() {
-        return routeListDouble;
+        return new ArrayList<>(routeMap.values());
+
     }
 
     public List<State> getStateList() {

@@ -66,7 +66,8 @@ public class Bot extends TelegramLongPollingBot {
             var userId = message.getFrom().getId();
             handleInputMessage(message, userId);
             action(userId);
-        } else if (update.hasCallbackQuery()) {
+        }
+        else if (update.hasCallbackQuery()) {
             var newMessage = changeInlineKeyboard.getChangedKeyboard(update);
             updateUserRouteList(update.getCallbackQuery().getFrom().getId());
             try {
@@ -116,7 +117,6 @@ public class Bot extends TelegramLongPollingBot {
     private void updateUserBotState(BotState newBotState, Integer userId, Message message) {
         usersData.updateStatesUserMap(userId, newBotState, message);
     }
-
 
     private void handleInputMessage(Message message, Integer userId) {
         System.out.println(message);
