@@ -33,11 +33,10 @@ public class State {
         }
     }
 
-    public void updateLongLang(double slatitude, double slongtitude){
-        latitude = slatitude;
-        longtitude = slongtitude;
+    public void updateLongLang(double latitude, double longtitude){
+        this.latitude = latitude;
+        this.longtitude = longtitude;
     }
-
 
     private void setFields(Message message){
         chatId = message.getChatId().toString();
@@ -54,10 +53,13 @@ public class State {
     public void  setTotalPhotoWorks(Integer col){
         totalPhotoWorks = col;
     }
+
     public Integer getTotalPhotoWorks(){
         return totalPhotoWorks;
     }
+
     public double getLatitudeLast(){return latitudeLast;}
+
     public double getLongtitudeLast(){return longtitudeLast;}
 
     public double getLatitude(){return  latitude; }
@@ -82,9 +84,9 @@ public class State {
         return numPhotoWorks;
     }
 
-    public void updateBotState(BotState istatus, Message ilastMessage) {
-        botState = istatus;
-        lastMessage = ilastMessage;
+    public void updateBotState(BotState status, Message lastMessage) {
+       this.botState = status;
+       this.lastMessage = lastMessage;
     }
 
     public BotState getBotState() {
