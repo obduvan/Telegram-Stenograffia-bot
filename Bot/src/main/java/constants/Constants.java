@@ -22,7 +22,7 @@ public class Constants {
     public static final Integer BUFFER = 5;
     public static final Integer COLWORKS = 114;
     public static final String ENDEDWORKSMSG = "Работ больше нет :(";
-
+    public static final String SYS_API_KEY = "API_GOOGLE_KEY";
     public static final String SYSTOKEN = "TOKEN";
     public static final String SYSNAMEBOT = "NAMEBOT";
 

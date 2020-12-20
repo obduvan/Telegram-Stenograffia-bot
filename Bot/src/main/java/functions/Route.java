@@ -1,18 +1,13 @@
 package functions;
 
-import com.google.common.base.MoreObjects;
 import constants.Constants;
-import constants.Keys;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.sqlite.core.DB;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import realizations.CreatorSendMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class Route {
     private CreatorSendMessage creatorSendMessage;
@@ -20,19 +15,25 @@ public class Route {
         creatorSendMessage = new CreatorSendMessage();
     }
 
-
-    public SendMessage sendRouteMsg(String chatId, List<String> routeList, double latitudeLast, double longtitudeLast, double latitude,  double longtitude){
-        ArrayList<Double[]> intermediatePoints = convertingInputList(routeList);
+    public SendMessage sendRouteMsg(String chatId, ArrayList<Double[]> routeList, double latitudeLast, double longtitudeLast, double latitude,  double longtitude){
 
         ArrayList<Double[]> coords = new ArrayList<>();
         Double[] startCoords = new Double[]{latitude, longtitude};
         Double[] finishCoords = new Double[]{latitudeLast, longtitudeLast};
         coords.add(startCoords);
-        coords.addAll(intermediatePoints);
+        coords.addAll(routeList);
 
         final HttpClient httpClient = new HttpClient();
 
-        ArrayList<Double[]> res = (ArrayList<Double[]>)coords.clone();
+        String routeLink = getRouteLink(coords, finishCoords, httpClient);
+        SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
+        sendMessage.setText(routeLink);
+
+        return sendMessage;
+    }
+
+    public String getRouteLink(ArrayList<Double[]> coords, Double[] finishCoords, HttpClient httpClient) {
+        ArrayList<Double[]> res = (ArrayList<Double[]>) coords.clone();
 
         for (var i = 0; i < res.size() - 1; i++) {
             double minWay = Double.MAX_VALUE;
@@ -46,15 +47,15 @@ public class Route {
                 var way = 0.0;
                 String url = Constants.DISTANCE_MATRIX_URL_PATH + lat1 + "," + long1 +
                         Constants.DISTANCE_MATRIX_URL_DESTINATIONS + lat2 + "," + long2 +
-                        Constants.DISTANCE_MATRIX_URL_KEY + Keys.GOOGLE_API_KEY;
+                        Constants.DISTANCE_MATRIX_URL_KEY + System.getenv(Constants.SYS_API_KEY);
 
                 final String response;
                 try {
                     response = httpClient.post (url);
                     final JSONObject obj = new JSONObject(response);
                     way = (Integer) ((JSONObject)((JSONObject)((JSONArray)((JSONObject)((JSONArray)obj.get("rows")).get(0)).get("elements")).get(0)).get("distance")).get("value");
-                } catch (IOException e) {
-                    e.printStackTrace ( );
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
 
                 if (way < minWay) {
@@ -67,11 +68,7 @@ public class Route {
 
         res.add(finishCoords);
 
-        String routeLink = creatorRouteLink(res);
-        SendMessage sendMessage = creatorSendMessage.setMessage(chatId);
-        sendMessage.setText(routeLink);
-
-        return sendMessage;
+        return creatorRouteLink(res);
     }
 
     private String creatorRouteLink(ArrayList<Double[]> res){
@@ -84,18 +81,5 @@ public class Route {
         resPath = resPath.substring(0, resPath.length() - 1);
         resPath = resPath + Constants.YA_MAP_PATH_PART;
         return resPath;
-    }
-
-    private ArrayList<Double[]> convertingInputList(List<String> routeList){
-        ArrayList<Double[]> intermediatePoints = new ArrayList<>();
-        for (var latLong:routeList) {
-            var coordsString = latLong.split(" ");
-            var currLatitude = Double.parseDouble(coordsString[0]);
-            var currLongtitude = Double.parseDouble(coordsString[1]);
-            var currCoords = new Double[]{currLatitude, currLongtitude};
-
-            intermediatePoints.add(currCoords);
-        }
-        return intermediatePoints;
     }
 }
